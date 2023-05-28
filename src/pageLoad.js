@@ -27,17 +27,35 @@ const loadHeader = () => {
 
 const loadMain = () => {
   const main = document.createElement('main');
+  main.classList = ['flex-grow'];
   return main;
 };
 
+const loadFooterText1 = () => {
+  const text = document.createElement('p');
+  text.innerText = 'A Project from JanPomelo';
+  text.classList = ['text-white'];
+  return text;
+};
+
+const loadFooterText2 = () => {
+  const text = document.createElement('p');
+  text.innerText = 'All Rights Reserved';
+  text.classList = ['text-white'];
+  return text;
+};
 const loadFooter = () => {
   const footer = document.createElement('footer');
+  footer.classList = ['bg-black flex flex-col justify-center items-center p-1'];
+  footer.appendChild(loadFooterText1());
+  footer.appendChild(loadFooterText2());
   return footer;
 };
 
 const loadPage = () => {
   const content = document.createElement('div');
   content.id = 'content';
+  content.classList = ['flex flex-col h-screen'];
   content.appendChild(loadHeader());
   content.appendChild(loadMain());
   content.appendChild(loadFooter());
