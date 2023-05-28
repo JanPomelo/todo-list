@@ -34,16 +34,17 @@ const loadMain = () => {
 const loadFooterText1 = () => {
   const text = document.createElement('p');
   text.innerText = 'A Project from JanPomelo';
-  text.classList = ['text-white'];
+  text.classList = ['text-white text-lg'];
   return text;
 };
 
 const loadFooterText2 = () => {
   const text = document.createElement('p');
   text.innerText = 'All Rights Reserved';
-  text.classList = ['text-white'];
+  text.classList = ['text-white '];
   return text;
 };
+
 const loadFooter = () => {
   const footer = document.createElement('footer');
   footer.classList = ['bg-black flex flex-col justify-center items-center p-1'];
