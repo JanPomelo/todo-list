@@ -1,5 +1,5 @@
 import './style.css';
-import {loadHeader} from './pageLoad';
+import {loadPage} from './pageLoad';
 
-const content = document.getElementById('content');
-content.appendChild(loadHeader());
+const body = document.getElementById('body');
+body.appendChild(loadPage());

@@ -25,5 +25,22 @@ const loadHeader = () => {
   return header;
 };
 
+const loadMain = () => {
+  const main = document.createElement('main');
+  return main;
+};
 
-export {loadHeader};
+const loadFooter = () => {
+  const footer = document.createElement('footer');
+  return footer;
+};
+
+const loadPage = () => {
+  const content = document.createElement('div');
+  content.id = 'content';
+  content.appendChild(loadHeader());
+  content.appendChild(loadMain());
+  content.appendChild(loadFooter());
+  return content;
+};
+export {loadPage};
