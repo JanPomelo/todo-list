@@ -1,4 +1,4 @@
-
+'use strict';
 /**
  * Creates the Header element.
  * Cretes the Header Content and adds it to the Header
