@@ -26,19 +26,48 @@ const loadHeader = () => {
   return header;
 };
 
+const loadToDoHeading = () => {
+  const div = document.createElement('div');
+  div.classList = ['w-full flex flex-row gap-3 pl-2 pt-1 pb-1 items-center'];
+  const text = document.createElement('h3');
+  text.innerText = 'Your ToDos:';
+  text.classList = ['font-bold'];
+  const button = document.createElement('button');
+  button.classList = ['rounded-xl border-black border-2 pl-2 pr-2'];
+  button.innerText = 'Add ToDo';
+  div.appendChild(text);
+  div.appendChild(button);
+  return div;
+};
 
 const loadTable = () => {
   const table = document.createElement('table');
-  const header = document.createElement('th');
-  table.appendChild(header);
+  table.classList = ['w-full text-left'];
+  const headerRow = document.createElement('tr');
+  headerRow.classList = ['bg-blue-100'];
+  const title = document.createElement('th');
+  title.classList = ['w-2/5 pl-2'];
+  title.innerText = 'Title';
+  const dueTo = document.createElement('th');
+  dueTo.innerText = 'Due Date';
+  const priority = document.createElement('th');
+  priority.innerText = 'Priority';
+  const more = document.createElement('th');
+  more.innerText = 'more';
+  headerRow.appendChild(title);
+  headerRow.appendChild(dueTo);
+  headerRow.appendChild(priority);
+  headerRow.appendChild(more);
+  table.appendChild(headerRow);
   return table;
 };
 
 const loadToDoDiv = () => {
   const todoDiv = document.createElement('div');
   todoDiv.classList = [
-    'h-full w-full sm:rounded-3xl sm:border-4 border-black sm:h-4/5 sm:w-full bg-white shadow-gray-950 sm:shadow-xl sm:shadow-gray-950',
+    'h-full w-full flex flex-col sm:rounded-3xl sm:border-4 border-black sm:h-4/5 sm:w-full bg-white shadow-gray-950 sm:shadow-xl sm:shadow-gray-950',
   ];
+  todoDiv.appendChild(loadToDoHeading());
   todoDiv.appendChild(loadTable());
   return todoDiv;
 };
