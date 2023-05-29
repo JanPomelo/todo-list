@@ -19,3 +19,19 @@ html {
 .bg-grey-100 {
 	background-color: #d0d1d3;
 }
+
+#content {
+	min-width: 270px;
+}
+
+tr.strikeout {
+  opacity: 0.5;
+}
+tr.strikeout td:before {
+	content: ' ';
+	position: absolute;
+	top: 50%;
+	left: 0;
+	border-bottom: 1px solid #111;
+	width: 100%;
+}

@@ -1,13 +1,14 @@
 /* eslint-disable max-len */
 /* eslint-disable require-jsdoc */
 class Todo {
-  constructor(title, description, dueDate, priority, checklist = '', notes = '') {
+  constructor(title, description, dueDate, priority, checklist = '', notes = '', done = 'false') {
     this.title = title;
     this.description = description;
     this.dueDate = dueDate;
     this.priority = priority;
     this.checklist = checklist;
     this.notes = notes;
+    this.done = done;
   }
   getTitle = () => {
     return this.title;
@@ -33,6 +34,10 @@ class Todo {
     return this.notes;
   };
 
+  getDone = () => {
+    return this.done;
+  };
+
   setTitle = (title) => {
     this.title = title;
   };
@@ -55,6 +60,10 @@ class Todo {
 
   setNotes = (notes) => {
     this.notes = notes;
+  };
+
+  setDone = (done) => {
+    this.done = done;
   };
 }
 

@@ -1,6 +1,8 @@
 /* eslint-disable max-len */
 'use strict';
 
+import replay from './img/replay.png';
+import muellTonne from './img/mulltonne.png';
 import {inbox} from './projects';
 
 const loadHeaderMainHeading = () => {
@@ -46,12 +48,12 @@ const loadTodos = (project) => {
   const allRows = [];
   for (let i = 0; i < project.todos.length; i++) {
     const row = document.createElement('tr');
-    for (let j = 0; j < 4; j++) {
+    for (let j = 0; j < 5; j++) {
       const td = document.createElement('td');
       switch (j) {
         case 0:
           td.innerText = project.todos[i].getTitle();
-          td.classList = ['pl-2']
+          td.classList = ['pl-2'];
           break;
         case 1:
           td.innerText = project.todos[i].getDueDate();
@@ -61,7 +63,30 @@ const loadTodos = (project) => {
           break;
         case 3:
           td.innerHTML = '...';
+          break;
+        case 4:
+          td.classList = ['flex flex-row-reverse justify-between items-center h-7 pr-2 relative'];
+          const trash = document.createElement('button');
+          const trashIcon = document.createElement('img');
+          trashIcon.src = muellTonne;
+          trash.appendChild(trashIcon);
+          trash.classList = ['w-4 h-4 border p-0.5 border-black rounded-md'];
+          td.appendChild(trash);
+          const tickDone = document.createElement('button');
+          tickDone.classList = [
+            'text-sm/3  w-4 h-4 border-black border rounded-md',
+          ];
+          td.appendChild(tickDone);
+          if (project.todos[i].getDone() === true) {
+            row.classList.add('strikeout');
+            const replayImg = document.createElement('img');
+            replayImg.src = replay;
+            tickDone.appendChild(replayImg);
+          } else {
+            tickDone.innerText = '✓';
+          };
       }
+      td.classList.add('relative');
       row.appendChild(td);
     }
     allRows.push(row);
@@ -75,18 +100,23 @@ const loadTable = () => {
   const headerRow = document.createElement('tr');
   headerRow.classList = ['bg-blue-100'];
   const title = document.createElement('th');
-  title.classList = ['w-2/5 pl-2'];
+  title.classList = ['w-1/3 pl-2'];
   title.innerText = 'Title';
   const dueTo = document.createElement('th');
-  dueTo.innerText = 'Due Date';
+  dueTo.innerText = 'Due';
+  dueTo.classList = ['w-1/5'];
   const priority = document.createElement('th');
   priority.innerText = 'Priority';
+  priority.classList = ['w-1/5'];
   const more = document.createElement('th');
   more.innerText = 'more';
+  more.classList = ['w-1/12'];
+  const done = document.createElement('th');
   headerRow.appendChild(title);
   headerRow.appendChild(dueTo);
   headerRow.appendChild(priority);
   headerRow.appendChild(more);
+  headerRow.appendChild(done);
   table.appendChild(headerRow);
   const allTodos = loadTodos(inbox);
   for (let i = 0; i < allTodos.length; i++) {
