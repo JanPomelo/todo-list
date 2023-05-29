@@ -4,6 +4,7 @@
 import replay from './img/replay.png';
 import muellTonne from './img/mulltonne.png';
 import {inbox} from './projects';
+import {toggleDone} from './workOnTodos';
 
 const loadHeaderMainHeading = () => {
   const heading = document.createElement('h1');
@@ -34,17 +35,28 @@ const loadToDoHeading = () => {
   const div = document.createElement('div');
   div.classList = ['w-full flex flex-row gap-3 pl-2 pt-1 pb-1 items-center'];
   const text = document.createElement('h3');
-  text.innerText = 'Your ToDos:';
+  text.innerText = 'Your To-Dos:';
   text.classList = ['font-bold'];
   const button = document.createElement('button');
   button.classList = ['rounded-xl border-black border-2 pl-2 pr-2'];
-  button.innerText = 'Add ToDo';
+  button.innerText = 'Add To-Do';
+  button.id = 'addTodoBut';
   div.appendChild(text);
   div.appendChild(button);
   return div;
 };
 
-const loadTodos = (project) => {
+const deleteCurrentTab = () => {
+  const tableBody = document.getElementById('tableBody');
+  if (tableBody) {
+    while (tableBody.firstChild) {
+      tableBody.removeChild(tableBody.firstChild);
+    }
+  }
+};
+
+const loadTodos = (project, tableBody = document.getElementById('tableBody')) => {
+  deleteCurrentTab();
   const allRows = [];
   for (let i = 0; i < project.todos.length; i++) {
     const row = document.createElement('tr');
@@ -62,7 +74,9 @@ const loadTodos = (project) => {
           td.innerText = project.todos[i].getPriority();
           break;
         case 3:
-          td.innerHTML = '...';
+          const moreBut = document.createElement('button');
+          td.appendChild(moreBut);
+          moreBut.innerHTML = '...';
           break;
         case 4:
           td.classList = ['flex flex-row-reverse justify-between items-center h-7 pr-2 relative'];
@@ -85,18 +99,28 @@ const loadTodos = (project) => {
           } else {
             tickDone.innerText = '✓';
           };
+          tickDone.addEventListener('click', () => {
+            toggleDone(project.todos[i]);
+          });
       }
       td.classList.add('relative');
       row.appendChild(td);
     }
     allRows.push(row);
   }
-  return allRows;
+  for (let i = 0; i < allRows.length; i++) {
+    tableBody.appendChild(allRows[i]);
+  }
 };
 
 const loadTable = () => {
   const table = document.createElement('table');
   table.classList = ['w-full text-left'];
+  const tableHeader = document.createElement('thead');
+  table.appendChild(tableHeader);
+  const tableBody = document.createElement('tbody');
+  tableBody.id = 'tableBody';
+  table.appendChild(tableBody);
   const headerRow = document.createElement('tr');
   headerRow.classList = ['bg-blue-100'];
   const title = document.createElement('th');
@@ -117,11 +141,8 @@ const loadTable = () => {
   headerRow.appendChild(priority);
   headerRow.appendChild(more);
   headerRow.appendChild(done);
-  table.appendChild(headerRow);
-  const allTodos = loadTodos(inbox);
-  for (let i = 0; i < allTodos.length; i++) {
-    table.appendChild(allTodos[i]);
-  }
+  tableHeader.appendChild(headerRow);
+  loadTodos(inbox, tableBody);
   return table;
 };
 
@@ -174,4 +195,4 @@ const loadPage = () => {
   content.appendChild(loadFooter());
   return content;
 };
-export {loadPage};
+export {loadTodos, loadPage};
