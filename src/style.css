@@ -11,3 +11,11 @@ html {
 .bg-black {
 	background-color: #222c3c;
 }
+
+.border-black {
+	border-color: #222c3c;
+}
+
+.bg-grey-100 {
+	background-color: #d0d1d3;
+}
