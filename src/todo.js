@@ -64,6 +64,6 @@ const logTodo1 = () => {
   console.log(todo1);
 };
 
-export {Todo, logTodo1};
+export {Todo, todo1, logTodo1};
 
 

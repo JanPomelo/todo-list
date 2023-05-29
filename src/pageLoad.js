@@ -1,6 +1,8 @@
 /* eslint-disable max-len */
 'use strict';
 
+import {inbox} from './projects';
+
 const loadHeaderMainHeading = () => {
   const heading = document.createElement('h1');
   heading.innerText = 'Mini-Do';
@@ -40,6 +42,33 @@ const loadToDoHeading = () => {
   return div;
 };
 
+const loadTodos = (project) => {
+  const allRows = [];
+  for (let i = 0; i < project.todos.length; i++) {
+    const row = document.createElement('tr');
+    for (let j = 0; j < 4; j++) {
+      const td = document.createElement('td');
+      switch (j) {
+        case 0:
+          td.innerText = project.todos[i].getTitle();
+          td.classList = ['pl-2']
+          break;
+        case 1:
+          td.innerText = project.todos[i].getDueDate();
+          break;
+        case 2:
+          td.innerText = project.todos[i].getPriority();
+          break;
+        case 3:
+          td.innerHTML = '...';
+      }
+      row.appendChild(td);
+    }
+    allRows.push(row);
+  }
+  return allRows;
+};
+
 const loadTable = () => {
   const table = document.createElement('table');
   table.classList = ['w-full text-left'];
@@ -59,8 +88,13 @@ const loadTable = () => {
   headerRow.appendChild(priority);
   headerRow.appendChild(more);
   table.appendChild(headerRow);
+  const allTodos = loadTodos(inbox);
+  for (let i = 0; i < allTodos.length; i++) {
+    table.appendChild(allTodos[i]);
+  }
   return table;
 };
+
 
 const loadToDoDiv = () => {
   const todoDiv = document.createElement('div');
