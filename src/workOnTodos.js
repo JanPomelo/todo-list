@@ -1,6 +1,7 @@
 'use strict';
 import {loadTodos} from './pageLoad';
 import {inbox} from './projects';
+import {reallySure} from './domManips';
 
 const toggleDone = (todo) => {
   const done = todo.getDone();
@@ -12,4 +13,9 @@ const toggleDone = (todo) => {
   loadTodos(inbox);
 };
 
-export {toggleDone};
+const deleteTodo = () => {
+  if (reallySure()) {
+  }
+};
+
+export {toggleDone, deleteTodo};

@@ -25,7 +25,7 @@ html {
 }
 
 tr.strikeout {
-  opacity: 0.5;
+	opacity: 0.5;
 }
 tr.strikeout td:before {
 	content: ' ';
@@ -34,4 +34,11 @@ tr.strikeout td:before {
 	left: 0;
 	border-bottom: 1px solid #111;
 	width: 100%;
+}
+
+#popUpDelete {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
 }
