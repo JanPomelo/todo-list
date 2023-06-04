@@ -5,7 +5,7 @@ import replay from './img/replay.png';
 import muellTonne from './img/mulltonne.png';
 import {inbox} from './projects';
 import {toggleDone} from './workOnTodos';
-import {reallySure} from './domManips';
+import {reallySure, displayAddTodoForm} from './domManips';
 
 const loadHeaderMainHeading = () => {
   const heading = document.createElement('h1');
@@ -42,6 +42,9 @@ const loadToDoHeading = () => {
   button.classList = ['rounded-xl border-black border-2 pl-2 pr-2'];
   button.innerText = 'Add To-Do';
   button.id = 'addTodoBut';
+  button.addEventListener('click', () => {
+    displayAddTodoForm();
+  });
   div.appendChild(text);
   div.appendChild(button);
   return div;

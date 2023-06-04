@@ -2,11 +2,12 @@
 'use strict';
 
 import {deleteTodoFromProject} from './workOnTodos.js';
+import closeImg from './img/close.png';
 
 const reallySure = (project, todo) => {
   const content = document.getElementById('content');
   const popUp = document.createElement('div');
-  popUp.classList = ['absolute grid grid-cols-2 gap-y-2 border-2 border-black rounded-xl p-2 max-w-sm shadow-xl'];
+  popUp.classList = ['absolute grid grid-cols-2 gap-y-2 border-2 border-black rounded-xl p-2 max-w-sm shadow-xl bg-white'];
   popUp.id = 'popUpDelete';
   const popUpHeadline = document.createElement('h3');
   popUpHeadline.innerText = 'Are you sure?';
@@ -41,4 +42,24 @@ const deleteReallySure = () => {
   popUp.remove();
 };
 
-export {reallySure};
+const displayAddTodoForm = () => {
+  const content = document.getElementById('content');
+  const form = document.createElement('form');
+  form.classList = ['absolute border-black border-2 rounded-xl w-4/5 h-4/5 bg-white shadow-xl p-2'];
+  const formHeading = document.createElement('div');
+  formHeading.classList = ['flex flex-column justify-between'];
+  const heading = document.createElement('h3');
+  heading.innerText = 'Add a To-Do';
+  heading.classList = ['text-3xl'];
+  const close = document.createElement('button');
+  const closeBtnImg = document.createElement('img');
+  closeBtnImg.src = closeImg;
+  close.classList = ['rounded-xl w-5 h-5 min-w-5 min-h-5 text-white align-middle'];
+  content.appendChild(form);
+  form.appendChild(formHeading);
+  formHeading.appendChild(heading);
+  formHeading.appendChild(close);
+  close.appendChild(closeBtnImg);
+};
+
+export {reallySure, displayAddTodoForm};

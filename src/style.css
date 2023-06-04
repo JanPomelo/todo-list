@@ -36,7 +36,7 @@ tr.strikeout td:before {
 	width: 100%;
 }
 
-#popUpDelete {
+#popUpDelete, form {
 	position: absolute;
 	left: 50%;
 	top: 50%;
