@@ -69,10 +69,12 @@ class Todo {
 
 const todo1 = new Todo('Todo erstellen', 'Hier in dem Skript ein Todo erstellen', 'today', 'high');
 
+const todo2 = new Todo('Todo loeschen', 'Todo loeschen halt ne', 'today', 'high');
+
 const logTodo1 = () => {
   console.log(todo1);
 };
 
-export {Todo, todo1, logTodo1};
+export {Todo, todo1, todo2, logTodo1};
 
 

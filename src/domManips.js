@@ -1,7 +1,9 @@
 /* eslint-disable max-len */
 'use strict';
 
-const reallySure = () => {
+import {deleteTodoFromProject} from './workOnTodos.js';
+
+const reallySure = (project, todo) => {
   const content = document.getElementById('content');
   const popUp = document.createElement('div');
   popUp.classList = ['absolute grid grid-cols-2 gap-y-2 border-2 border-black rounded-xl p-2 max-w-sm shadow-xl'];
@@ -16,15 +18,27 @@ const reallySure = () => {
   const popUpYes = document.createElement('button');
   popUpYes.innerHTML = 'Delete';
   popUpYes.classList = ['border-2 border-black rounded-lg w-4/5 justify-self-center bg-black text-white active:shadow-md active:shadow-indigo-500'];
+  popUpYes.addEventListener('click', () => {
+    deleteTodoFromProject(project, todo);
+    deleteReallySure();
+  });
   const popUpNo = document.createElement('button');
   popUpNo.innerHTML = 'Keep';
   popUpNo.classList = popUpYes.classList;
+  popUpNo.addEventListener('click', () => {
+    deleteReallySure();
+  });
   popUp.appendChild(popUpHeadline);
   popUp.appendChild(popUpText);
   popUp.appendChild(popUpYes);
   popUp.appendChild(popUpNo);
   content.appendChild(popUp);
   return;
+};
+
+const deleteReallySure = () => {
+  const popUp = document.getElementById('popUpDelete');
+  popUp.remove();
 };
 
 export {reallySure};

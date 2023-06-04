@@ -5,7 +5,7 @@ import replay from './img/replay.png';
 import muellTonne from './img/mulltonne.png';
 import {inbox} from './projects';
 import {toggleDone} from './workOnTodos';
-import {deleteTodo} from './workOnTodos';
+import {reallySure} from './domManips';
 
 const loadHeaderMainHeading = () => {
   const heading = document.createElement('h1');
@@ -101,10 +101,10 @@ const loadTodos = (project, tableBody = document.getElementById('tableBody')) =>
             tickDone.innerText = '✓';
           }
           tickDone.addEventListener('click', () => {
-            toggleDone(project.todos[i]);
+            toggleDone(project, project.todos[i]);
           });
           trash.addEventListener('click', () => {
-            deleteTodo();
+            reallySure(project, project.todos[i]);
           });
       }
       td.classList.add('relative');
