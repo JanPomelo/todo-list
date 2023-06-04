@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable require-jsdoc */
 class Todo {
-  constructor(title, description, dueDate, priority, checklist = '', notes = '', done = 'false') {
+  constructor(title, dueDate, priority, description, checklist = '', notes = '', done = 'false') {
     this.title = title;
     this.description = description;
     this.dueDate = dueDate;
@@ -67,9 +67,14 @@ class Todo {
   };
 }
 
-const todo1 = new Todo('Todo erstellen', 'Hier in dem Skript ein Todo erstellen', 'today', 'high');
+const todo1 = new Todo('Todo erstellen', 'today', 'high');
 
-const todo2 = new Todo('Todo loeschen', 'Todo loeschen halt ne', 'today', 'high');
+const todo2 = new Todo(
+    'Todo loeschen',
+    'today',
+    'high',
+    'Todo loeschen halt ne',
+);
 
 const logTodo1 = () => {
   console.log(todo1);

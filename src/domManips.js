@@ -1,8 +1,10 @@
 /* eslint-disable max-len */
 'use strict';
 
-import {deleteTodoFromProject} from './workOnTodos.js';
+import {deleteTodoFromProject, createNewTodo} from './workOnTodos.js';
 import closeImg from './img/close.png';
+import {getCurrentProject} from './projects.js';
+import {loadPage, loadTodos} from './pageLoad.js';
 
 const reallySure = (project, todo) => {
   const content = document.getElementById('content');
@@ -57,6 +59,10 @@ const addFormHeader = () => {
   formHeading.appendChild(heading);
   formHeading.appendChild(close);
   close.appendChild(closeBtnImg);
+  close.addEventListener('click', () => {
+    const form = document.getElementById('addTodoForm');
+    form.remove();
+  });
   return formHeading;
 };
 
@@ -83,11 +89,11 @@ const addTitleDiv = () => {
   title.label.for = 'title';
   title.input.type = 'text';
   title.input.id = 'title';
+  title.input.name = 'title';
   // titleInput.required = true;
   title.input.title = 'Add a To-Do Title here.';
   title.input.classList = [
-    'border-black border-2 rounded-lg active:border-4 focus:border-4 active:border-black focus:border-black',
-  ];
+    'border-black border-2 rounded-lg w-36 active:border-4 focus:border-4 active:border-black focus:border-black'];
   appendLabelAndInputToDiv(title.div, title.label, title.input);
   return title.div;
 };
@@ -97,22 +103,71 @@ const addDueDateDiv = () => {
   dueDate.label.innerText = 'Due Date';
   dueDate.label.for = 'datePicker';
   dueDate.input.type = 'date';
+  dueDate.input.name = 'dueDate';
   dueDate.input.id = 'datePicker';
-  dueDate.input.classList = ['text-xl']
+  dueDate.input.classList = ['text-xl'];
   appendLabelAndInputToDiv(dueDate.div, dueDate.label, dueDate.input);
   return dueDate.div;
+};
+
+const addPriorityDiv = () => {
+  const priority = addDivForAddToDoForm();
+  priority.label.innerText = 'Priority';
+  priority.label.for = 'priorities';
+  priority.input.remove();
+  const input = document.createElement('select');
+  priority.div.appendChild(input);
+  input.name = 'priority';
+  input.id = 'priorities';
+  input.classList = ['border-black border-2 w-36 rounded-lg active:border-4 focus:border-4 active:border-black focus:border-black pl-3'];
+  const high = document.createElement('option');
+  high.value = 'High';
+  high.innerText = 'High';
+  input.appendChild(high);
+  const medium = document.createElement('option');
+  medium.value = 'Medium';
+  medium.innerText = 'Medium';
+  input.appendChild(medium);
+  const low = document.createElement('option');
+  low.value = 'Low';
+  low.innerText = 'Low';
+  input.appendChild(low);
+  appendLabelAndInputToDiv(priority.div, priority.label, input);
+  return priority.div;
+};
+
+const addSubmitButton = () => {
+  const submitButton = document.createElement('button');
+  submitButton.type = 'submit';
+  submitButton.innerText = 'Add To-Do';
+  submitButton.classList = ['text-white bg-black rounded-xl pl-2 pr-2'];
+  submitButton.addEventListener('click', () => {
+    const project = getCurrentProject();
+    const todo = createNewTodo();
+    project.addTodo(todo);
+    // createNewTodo();
+    loadTodos(project);
+    const form = document.getElementById('addTodoForm');
+    form.remove();
+  });
+  return submitButton;
 };
 
 const addFormContent = () => {
   const formContent = document.createElement('div');
   formContent.appendChild(addTitleDiv());
   formContent.appendChild(addDueDateDiv());
+  formContent.appendChild(addPriorityDiv());
+  formContent.appendChild(addSubmitButton());
   return formContent;
 };
 
 const displayAddTodoForm = () => {
   const content = document.getElementById('content');
   const form = document.createElement('form');
+  form.onsubmit = () => {
+    return false;
+  };
   form.action = 'submit';
   form.id = 'addTodoForm';
   form.classList = ['absolute border-black border-2 rounded-xl w-4/5 h-4/5 bg-white shadow-xl p-2'];

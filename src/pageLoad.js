@@ -3,7 +3,7 @@
 
 import replay from './img/replay.png';
 import muellTonne from './img/mulltonne.png';
-import {inbox} from './projects';
+import {getCurrentProject} from './projects';
 import {toggleDone} from './workOnTodos';
 import {reallySure, displayAddTodoForm} from './domManips';
 
@@ -149,7 +149,7 @@ const loadTable = () => {
   headerRow.appendChild(more);
   headerRow.appendChild(done);
   tableHeader.appendChild(headerRow);
-  loadTodos(inbox, tableBody);
+  loadTodos(getCurrentProject(), tableBody);
   return table;
 };
 

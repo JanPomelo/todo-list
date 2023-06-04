@@ -6,11 +6,33 @@ class Project {
     this.name = name;
     this.todos = todos;
   }
+  addTodo = (todo) => {
+    this.todos.push(todo);
+  };
+
+  deleteTodo = (todo) => {
+    for (let i = 0; i < this.todos.length; i++) {
+      if (todo.getTitle() === this.todos[i].getTitle()) {
+        this.todos.splice(i, 1);
+      }
+    }
+  };
 }
+let currentProject = '';
+const allProjects = [];
 
+const getCurrentProject = () => {
+  return currentProject;
+};
+
+const setCurrentProject = (project) => {
+  currentProject = project;
+};
 const inbox = new Project('Inbox');
+allProjects.push(inbox);
+inbox.addTodo(todo1);
+inbox.addTodo(todo2);
 
-inbox.todos.push(todo1);
-inbox.todos.push(todo2);
+currentProject = inbox;
 
-export {inbox};
+export {allProjects, Project, getCurrentProject, setCurrentProject};
