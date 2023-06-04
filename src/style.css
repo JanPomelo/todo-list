@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 
+input {
+	-webkit-appearance: none;
+	outline: none;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -36,9 +41,14 @@ tr.strikeout td:before {
 	width: 100%;
 }
 
-#popUpDelete, form {
+#popUpDelete,
+form {
 	position: absolute;
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
+}
+
+input[type='date'] {
+	font-family: 'Quicksand';
 }
