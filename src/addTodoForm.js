@@ -199,7 +199,7 @@ const addCheckListHeading = () => {
     form.appendChild(mention);
     form.appendChild(addSubmitButton());
     input.remove();
-    mention.classList = ['mb-2 mt-1']
+    mention.classList = ['mb-2 mt-1'];
     mention.innerText = 'Just one Checklist Item is addable here. If you want to add more Items to your checklist, click on the \'...\' at the Todo in your list.';
   });
   appendLabelAndInputToDiv(checkList.div, checkList.label, input);

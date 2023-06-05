@@ -7,7 +7,7 @@ import {getCurrentProject} from './projects';
 import {toggleDone} from './workOnTodos';
 import {reallySure} from './domManips';
 import {displayAddTodoForm} from './addTodoForm';
-import {blur} from './domManips';
+import {blur, expandMore} from './domManips';
 
 const loadHeaderMainHeading = () => {
   const heading = document.createElement('h1');
@@ -87,6 +87,13 @@ const loadTodos = (project, tableBody = document.getElementById('tableBody')) =>
           const moreBut = document.createElement('button');
           td.appendChild(moreBut);
           moreBut.innerHTML = '...';
+          moreBut.addEventListener('click', () => {
+            const details = expandMore(project.todos[i]);
+            for (let j = details.length - 1; j >= 0; j--) {
+              const emptyRow = tableBody.insertRow(i + 1);
+              emptyRow.innerHTML = details[j].innerHTML;
+            }
+          });
           break;
         case 4:
           td.classList = ['flex flex-row-reverse justify-between items-center h-7 pr-2 relative'];

@@ -8,6 +8,36 @@ const blur = (smth) => {
   smth.classList.toggle('pointer-events-none');
 };
 
+const expandOneRow = (attribute, text) => {
+  const row = document.createElement('tr');
+  const col1 = document.createElement('td');
+  const col2 = document.createElement('td');
+  const col3 = document.createElement('td');
+  col1.classList = ['pl-4 text-sm'];
+  col2.classList = ['text-sm'];
+  col1.innerText = text;
+  if (attribute) {
+    col2.innerText = attribute;
+  } else {
+    col2.innerText = 'empty';
+    col2.classList.add('opacity-50');
+  }
+  col2.colSpan = 3;
+  const button = document.createElement('button');
+  col3.appendChild(button);
+  row.appendChild(col1);
+  row.appendChild(col2);
+  row.appendChild(col3);
+  return row;
+};
+
+const expandMore = (todo) => {
+  const more = [expandOneRow(todo.getDescription(), 'Description')];
+  more.push(expandOneRow(todo.getNotes(), 'Notes'));
+  more.push(expandOneRow(todo.getChecklist(), 'Checklist'));
+
+  return more;
+};
 
 const reallySure = (project, todo) => {
   const content = document.getElementById('content');
@@ -50,4 +80,4 @@ const deleteReallySure = () => {
   popUp.remove();
 };
 
-export {reallySure, blur};
+export {reallySure, blur, expandMore};
