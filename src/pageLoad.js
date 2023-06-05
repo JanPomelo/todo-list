@@ -143,10 +143,10 @@ const loadTable = () => {
   title.innerText = 'Title';
   const dueTo = document.createElement('th');
   dueTo.innerText = 'Due';
-  dueTo.classList = ['w-1/5'];
+  dueTo.classList = ['w-1/4'];
   const priority = document.createElement('th');
   priority.innerText = 'Priority';
-  priority.classList = ['w-1/5'];
+  priority.classList = ['w-1/6'];
   const more = document.createElement('th');
   more.innerText = 'more';
   more.classList = ['w-1/12'];
