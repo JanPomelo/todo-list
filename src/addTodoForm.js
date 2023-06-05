@@ -5,9 +5,10 @@ import closeImg from './img/close.png';
 import {getCurrentProject} from './projects.js';
 import {loadTodos} from './pageLoad.js';
 import {createNewTodo} from './workOnTodos';
+import {blur} from './domManips';
 
 
-const showFormError = (message) => {
+const showFormError = (form, message) => {
   const formError = document.createElement('div');
   formError.classList = ['text-white bg-black rounded-lg shadow-md p-2 flex flex-col gap-2'];
   formError.id = 'formError';
@@ -15,7 +16,9 @@ const showFormError = (message) => {
   errorHeading.classList = ['text-2xl'];
   const errorMsg = document.createElement('p');
   const okBut = document.createElement('button');
-  okBut.classList = ['bg-white text-black rounded-lg'];
+  okBut.classList = [
+    'bg-white text-black rounded-lg active:shadow-md active:shadow-indigo-500',
+  ];
   formError.appendChild(errorHeading);
   formError.appendChild(errorMsg);
   formError.appendChild(okBut);
@@ -30,16 +33,21 @@ const showFormError = (message) => {
   const content = document.getElementById('content');
   content.appendChild(formError);
   okBut.addEventListener('click', () => {
+    blur(form);
     formError.remove();
   });
 };
 
 const checkForm = (form, title, date) => {
   if (title === '') {
-    showFormError('title');
+    showFormError(form, 'title');
+    blur(form);
   } else if (date === undefined || date === '') {
-    showFormError('date');
+    showFormError(form, 'date');
+    blur(form);
   } else {
+    const main = document.getElementById('main');
+    blur(main);
     const project = getCurrentProject();
     const todo = createNewTodo();
     project.addTodo(todo);
@@ -59,12 +67,14 @@ const addFormHeader = () => {
   const closeBtnImg = document.createElement('img');
   closeBtnImg.src = closeImg;
   close.classList = [
-    'rounded-xl w-5 h-5 min-w-5 min-h-5 text-white align-middle',
+    'rounded-xl w-5 h-5 min-w-5 min-h-5 text-white align-middle active:shadow-sm',
   ];
   formHeading.appendChild(heading);
   formHeading.appendChild(close);
   close.appendChild(closeBtnImg);
   close.addEventListener('click', () => {
+    const main = document.getElementById('main');
+    blur(main);
     const form = document.getElementById('addTodoForm');
     form.remove();
   });
@@ -147,7 +157,9 @@ const addSubmitButton = () => {
   const submitButton = document.createElement('button');
   submitButton.type = 'submit';
   submitButton.innerText = 'Add To-Do';
-  submitButton.classList = ['text-white bg-black rounded-xl pl-2 pr-2'];
+  submitButton.classList = [
+    'text-white bg-black rounded-xl pl-2 pr-2 active:shadow-md active:shadow-indigo-500',
+  ];
   submitButton.addEventListener('click', () => {
     const form = document.getElementById('addTodoForm');
     const title = form.title.value;

@@ -3,6 +3,12 @@
 
 import {deleteTodoFromProject} from './workOnTodos.js';
 
+const blur = (smth) => {
+  smth.classList.toggle('blur-md');
+  smth.classList.toggle('pointer-events-none');
+};
+
+
 const reallySure = (project, todo) => {
   const content = document.getElementById('content');
   const popUp = document.createElement('div');
@@ -18,15 +24,18 @@ const reallySure = (project, todo) => {
   const popUpYes = document.createElement('button');
   popUpYes.innerHTML = 'Delete';
   popUpYes.classList = ['border-2 border-black rounded-lg w-4/5 justify-self-center bg-black text-white active:shadow-md active:shadow-indigo-500'];
+  const main = document.getElementById('main');
   popUpYes.addEventListener('click', () => {
     deleteTodoFromProject(project, todo);
     deleteReallySure();
+    blur(main);
   });
   const popUpNo = document.createElement('button');
   popUpNo.innerHTML = 'Keep';
   popUpNo.classList = popUpYes.classList;
   popUpNo.addEventListener('click', () => {
     deleteReallySure();
+    blur(main);
   });
   popUp.appendChild(popUpHeadline);
   popUp.appendChild(popUpText);
@@ -41,4 +50,4 @@ const deleteReallySure = () => {
   popUp.remove();
 };
 
-export {reallySure};
+export {reallySure, blur};

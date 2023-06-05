@@ -7,6 +7,7 @@ import {getCurrentProject} from './projects';
 import {toggleDone} from './workOnTodos';
 import {reallySure} from './domManips';
 import {displayAddTodoForm} from './addTodoForm';
+import {blur} from './domManips';
 
 const loadHeaderMainHeading = () => {
   const heading = document.createElement('h1');
@@ -40,10 +41,14 @@ const loadToDoHeading = () => {
   text.innerText = 'Your To-Dos:';
   text.classList = ['font-bold'];
   const button = document.createElement('button');
-  button.classList = ['rounded-xl border-black border-2 pl-2 pr-2'];
+  button.classList = [
+    'rounded-xl border-black border-2 pl-2 pr-2 active:shadow-md active:shadow-indigo-500',
+  ];
   button.innerText = 'Add To-Do';
   button.id = 'addTodoBut';
   button.addEventListener('click', () => {
+    const main = document.getElementById('main');
+    blur(main);
     displayAddTodoForm();
   });
   div.appendChild(text);
@@ -108,6 +113,8 @@ const loadTodos = (project, tableBody = document.getElementById('tableBody')) =>
             toggleDone(project, project.todos[i]);
           });
           trash.addEventListener('click', () => {
+            const main = document.getElementById('main');
+            blur(main);
             reallySure(project, project.todos[i]);
           });
       }
@@ -168,6 +175,7 @@ const loadToDoDiv = () => {
 const loadMain = () => {
   const main = document.createElement('main');
   main.classList = ['flex-grow bg-grey-100 flex justify-center items-center sm:pl-5 sm:pr-5 xl:pr-20 xl:pl-20'];
+  main.id = 'main';
   main.appendChild(loadToDoDiv());
   return main;
 };
