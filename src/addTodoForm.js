@@ -153,6 +153,20 @@ const addPriorityDiv = () => {
   return priority.div;
 };
 
+const addDescriptionDiv = () => {
+  const description = addDivForAddToDoForm();
+  description.label.innerText = 'Description';
+  description.label.for = 'description';
+  description.input.remove();
+  const input = document.createElement('textarea');
+  input.id = 'description';
+  input.name = 'description';
+  input.classList = ['border-black border-2 rounded-lg w-36 active:border-4 focus:border-4 active:border-black focus:border-black',
+  ];
+  appendLabelAndInputToDiv(description.div, description.label, input);
+  return description.div;
+};
+
 const addSubmitButton = () => {
   const submitButton = document.createElement('button');
   submitButton.type = 'submit';
@@ -171,9 +185,11 @@ const addSubmitButton = () => {
 
 const addFormContent = () => {
   const formContent = document.createElement('div');
+  formContent.classList = ['flex flex-col gap-1'];
   formContent.appendChild(addTitleDiv());
   formContent.appendChild(addDueDateDiv());
   formContent.appendChild(addPriorityDiv());
+  formContent.appendChild(addDescriptionDiv());
   formContent.appendChild(addSubmitButton());
   return formContent;
 };
