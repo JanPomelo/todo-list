@@ -13,17 +13,20 @@ const expandOneRow = (attribute, text) => {
   const col1 = document.createElement('td');
   const col2 = document.createElement('td');
   const col3 = document.createElement('td');
-  col1.classList = ['pl-4 text-sm'];
-  col2.classList = ['text-sm'];
+  col1.classList = ['pl-4 text-sm bg-gray-100'];
+  col2.classList = ['text-sm bg-gray-100'];
   col1.innerText = text;
   if (attribute) {
     col2.innerText = attribute;
   } else {
     col2.innerText = 'empty';
-    col2.classList.add('opacity-50');
+    col2.classList.add('text-slate-500');
   }
   col2.colSpan = 3;
+  col3.classList = ['h-full py-1 bg-gray-100 flex justify-center items-center md:justify-start'];
   const button = document.createElement('button');
+  button.innerText = 'edit';
+  button.classList = ['text-xs border-black border rounded-lg px-1 items-self-center justify-self-center'];
   col3.appendChild(button);
   row.appendChild(col1);
   row.appendChild(col2);

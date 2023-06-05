@@ -87,12 +87,20 @@ const loadTodos = (project, tableBody = document.getElementById('tableBody')) =>
           const moreBut = document.createElement('button');
           td.appendChild(moreBut);
           moreBut.innerHTML = '...';
-          moreBut.addEventListener('click', () => {
+          moreBut.addEventListener('click', function expand() {
             const details = expandMore(project.todos[i]);
             for (let j = details.length - 1; j >= 0; j--) {
-              const emptyRow = tableBody.insertRow(i + 1);
+              const emptyRow = tableBody.insertRow(row.rowIndex);
               emptyRow.innerHTML = details[j].innerHTML;
             }
+            moreBut.removeEventListener('click', expand);
+            moreBut.addEventListener('click', function minimize() {
+              for (let j = details.length - 1; j >= 0; j--) {
+                tableBody.deleteRow(row.rowIndex);
+              }
+              moreBut.removeEventListener('click', minimize);
+              moreBut.addEventListener('click', expand);
+            });
           });
           break;
         case 4:
