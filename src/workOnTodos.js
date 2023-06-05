@@ -20,6 +20,15 @@ const createNewTodo = () => {
   if (form.description.value != '') {
     todo.setDescription(form.description.value);
   }
+  if (form.notes.value != '') {
+    todo.setNotes(form.notes.value);
+    console.log(todo.getNotes());
+  }
+  if (form.checklist) {
+    if (form.checklist.value != '') {
+      todo.setChecklist([form.checklist.value]);
+    }
+  }
   return todo;
 };
 const deleteTodoFromProject = (project, todo) => {

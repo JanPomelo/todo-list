@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable require-jsdoc */
 class Todo {
-  constructor(title, dueDate, priority, description, checklist = '', notes = '', done = 'false') {
+  constructor(title, dueDate, priority, description, checklist = [], notes = '', done = 'false') {
     this.title = title;
     this.description = description;
     this.dueDate = dueDate;

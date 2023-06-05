@@ -87,7 +87,7 @@ const addDivForAddToDoForm = () => {
     'flex flex-colum justify-between gap-8 md:justify-start md:gap-56',
   ];
   const label = document.createElement('label');
-  label.classList = ['text-xl w-32'];
+  label.classList = ['text-xl w-32 font-bold'];
   const input = document.createElement('input');
   input.classList = ['w-36 justify-self-end'];
   return {div, label, input};
@@ -167,10 +167,63 @@ const addDescriptionDiv = () => {
   return description.div;
 };
 
+const addNotesDiv = () => {
+  const notes = addDivForAddToDoForm();
+  notes.label.innerText = 'Notes';
+  notes.label.for = 'notes';
+  notes.input.remove();
+  const input = document.createElement('textarea');
+  input.id = 'notes';
+  input.name = 'notes';
+  input.classList = [
+    'border-black border-2 rounded-lg w-36 active:border-4 focus:border-4 active:border-black focus:border-black',
+  ];
+  appendLabelAndInputToDiv(notes.div, notes.label, input);
+  return notes.div;
+};
+
+const addCheckListHeading = () => {
+  const checkList = addDivForAddToDoForm();
+  checkList.label.innerText = 'Checklist';
+  checkList.label.for = 'checkListHeading';
+  checkList.input.remove();
+  const input = document.createElement('button');
+  input.innerText = 'Add Item';
+  input.classList = ['rounded-lg bg-black text-white pl-1 pr-1'];
+  input.addEventListener('click', () => {
+    const submitButton = document.getElementById('submitTodo');
+    submitButton.remove();
+    const form = document.getElementById('addTodoForm');
+    form.appendChild(addChecklist1());
+    const mention = document.createElement('p');
+    form.appendChild(mention);
+    form.appendChild(addSubmitButton());
+    input.remove();
+    mention.classList = ['mb-2 mt-1']
+    mention.innerText = 'Just one Checklist Item is addable here. If you want to add more Items to your checklist, click on the \'...\' at the Todo in your list.';
+  });
+  appendLabelAndInputToDiv(checkList.div, checkList.label, input);
+  return checkList.div;
+};
+
+const addChecklist1 = () => {
+  const checkList = addDivForAddToDoForm();
+  checkList.label.innerText = 'Item 1';
+  checkList.label.for = 'checklist';
+  checkList.input.id = 'checklist';
+  checkList.input.name = 'checklist';
+  checkList.input.classList = [
+    'border-black border-2 rounded-lg w-36 active:border-4 focus:border-4 active:border-black focus:border-black',
+  ];
+  appendLabelAndInputToDiv(checkList.div, checkList.label, checkList.input);
+  return checkList.div;
+};
+
 const addSubmitButton = () => {
   const submitButton = document.createElement('button');
   submitButton.type = 'submit';
   submitButton.innerText = 'Add To-Do';
+  submitButton.id = 'submitTodo';
   submitButton.classList = [
     'text-white bg-black rounded-xl pl-2 pr-2 active:shadow-md active:shadow-indigo-500',
   ];
@@ -190,6 +243,8 @@ const addFormContent = () => {
   formContent.appendChild(addDueDateDiv());
   formContent.appendChild(addPriorityDiv());
   formContent.appendChild(addDescriptionDiv());
+  formContent.appendChild(addNotesDiv());
+  formContent.appendChild(addCheckListHeading());
   formContent.appendChild(addSubmitButton());
   return formContent;
 };
