@@ -5,7 +5,8 @@ import replay from './img/replay.png';
 import muellTonne from './img/mulltonne.png';
 import {getCurrentProject} from './projects';
 import {toggleDone} from './workOnTodos';
-import {reallySure, displayAddTodoForm} from './domManips';
+import {reallySure} from './domManips';
+import {displayAddTodoForm} from './addTodoForm';
 
 const loadHeaderMainHeading = () => {
   const heading = document.createElement('h1');
