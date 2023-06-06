@@ -88,18 +88,31 @@ const expandOneRow = (attribute, text, todo) => {
         customCol3(col3, safeBut, cancelBut, editBut);
       });
       safeBut.addEventListener('click', () => {
-        let newValue = '';
-        const input = document.getElementById(text);
-        todo.setDescription(input.value);
-        newValue = todo.getDescription();
-        if (newValue.trim() != '' && newValue.trim() != 'empty') {
-          console.log(newValue);
-          col2.classList.remove('text-slate-500');
-          col2.innerText = newValue;
-        } else {
-          col2.innerText = 'empty';
+        const descInput = document.getElementById('Description');
+        const notesInput = document.getElementById('Notes');
+        const descTD = document.getElementById(
+            todo.getTitle().concat('-', 'Description'),
+        );
+        const notesTD = document.getElementById(
+            todo.getTitle().concat('-', 'Notes'),
+        );
+        todo.setDescription(descInput.value);
+        todo.setNotes(notesInput.value);
+        const newChanges = [descInput.value, notesInput.value];
+        const newDisplays = [descTD, notesTD];
+        for (let value = 0; value < newChanges.length; value++) {
+          const newValue = newChanges[value];
+          if (newValue.trim() != '' && newValue.trim() != 'empty') {
+            console.log(newValue);
+            newDisplays[value].classList.remove('text-slate-500');
+            newDisplays[value].innerText = newValue;
+          } else {
+            newDisplays[value].innerText = 'empty';
+            newDisplays[value].classList.add('text-slate-500');
+          }
         }
-        input.remove();
+        descInput.remove();
+        notesInput.remove();
         customCol3(col3, safeBut, cancelBut, editBut);
       });
     });
