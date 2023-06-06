@@ -9,23 +9,32 @@ const blur = (smth) => {
 };
 
 const customCol3 = (col3, safeBut, cancelBut, editBut) => {
-  col3.classList.remove(
-      'flex-col',
-      'md:flex-row',
-      'md:gap-8',
-      'md:justify-start',
-      'h-14',
-  );
+  col3.classList.remove('md:gap-8');
   safeBut.remove();
   cancelBut.remove();
   col3.appendChild(editBut);
 };
 
+const makeTDeditable = (id, todo, inputID) => {
+  const element = document.getElementById(id);
+  if (id === todo.getTitle().concat('-', 'Description') || id === todo.getTitle().concat('-', 'Notes')) {
+    const input = document.createElement('textarea');
+    input.classList = ['max-h-12 h-12 resize-none w-full'];
+    input.defaultValue = element.innerText;
+    element.innerText = '';
+    element.appendChild(input);
+    element.classList.add('pr-5');
+    input.id = inputID;
+  }
+};
+
+
 const expandOneRow = (attribute, text, todo) => {
   const row = document.createElement('tr');
   const col1 = document.createElement('td');
+  const col1ID = todo.getTitle().concat('-', text);
   const col2 = document.createElement('td');
-  const col3 = document.createElement('td');
+  col2.id = col1ID;
   col1.classList = ['pl-4 text-sm bg-gray-100'];
   col2.classList = ['text-sm bg-gray-100'];
   col1.innerText = text;
@@ -41,60 +50,48 @@ const expandOneRow = (attribute, text, todo) => {
     col2.classList.add('text-slate-500');
   }
   col2.colSpan = 3;
-  col3.classList = ['h-full py-1 bg-gray-100 flex justify-center items-center md:justify-start'];
-  col3.colSpan = 2;
-  const editBut = document.createElement('button');
-  editBut.innerText = 'edit';
-  editBut.classList = ['text-xs border-black border rounded-lg px-1'];
-  col3.appendChild(editBut);
   row.appendChild(col1);
   row.appendChild(col2);
-  row.appendChild(col3);
-  editBut.addEventListener('click', () => {
-    const safeBut = document.createElement('button');
-    const cancelBut = document.createElement('button');
-    safeBut.innerText = 'Safe';
-    safeBut.classList = editBut.classList;
-    safeBut.classList.add('m-1', 'md:m-0');
-    cancelBut.classList = safeBut.classList;
-    cancelBut.innerText = 'Cancel';
-    editBut.remove();
-    col3.appendChild(safeBut);
-    col3.appendChild(cancelBut);
-    col3.classList.add(
-        'flex-col',
-        'md:flex-row',
-        'md:gap-8',
-        'md:justify-start',
-        'h-14');
-    if (text === 'Description' || text === 'Notes') {
-      const input = document.createElement('textarea');
-      input.classList = ['max-h-12 h-12 resize-none w-full'];
-      input.defaultValue = col2.innerText;
-      col2.innerText = '';
-      col2.appendChild(input);
-      col2.classList.add('pr-5');
-      input.id = text;
-    }
-    cancelBut.addEventListener('click', () => {
-      if (text === 'Description' || text === 'Notes') {
+  if (text === 'Description') {
+    const editBut = document.createElement('button');
+    editBut.innerText = 'edit';
+    editBut.classList = ['text-xs border-black border rounded-lg px-1'];
+    const col3 = document.createElement('td');
+    col3.classList = ['py-1 bg-gray-100 flex-col justify-center items-center'];
+    col3.appendChild(editBut);
+    col3.rowSpan = 3;
+    row.appendChild(col3);
+    editBut.addEventListener('click', () => {
+      const safeBut = document.createElement('button');
+      const cancelBut = document.createElement('button');
+      safeBut.innerText = 'Safe';
+      cancelBut.innerText = 'Cancel';
+      safeBut.classList = editBut.classList;
+      cancelBut.classList = safeBut.classList;
+      safeBut.classList.add('ml-5', 'mr-auto');
+      cancelBut.classList.add('mr-5', 'ml-auto');
+      editBut.remove();
+      col3.appendChild(safeBut);
+      col3.appendChild(cancelBut);
+      col3.classList.add('flex-col', 'md:gap-8');
+      makeTDeditable(col1ID, todo, text);
+      makeTDeditable(todo.getTitle().concat('-', 'Notes'), todo, 'Notes');
+      cancelBut.addEventListener('click', () => {
+        const descInput = document.getElementById('Description');
+        const notesInput = document.getElementById('Notes');
+        const descTD = document.getElementById(todo.getTitle().concat('-', 'Description'));
+        const notesTD = document.getElementById(todo.getTitle().concat('-', 'Notes'));
+        descTD.innerText = descInput.defaultValue;
+        notesTD.innerText = notesInput.defaultValue;
+        descInput.remove();
+        notesInput.remove();
+        customCol3(col3, safeBut, cancelBut, editBut);
+      });
+      safeBut.addEventListener('click', () => {
+        let newValue = '';
         const input = document.getElementById(text);
-        col2.innerText = input.defaultValue;
-        input.remove();
-      }
-      customCol3(col3, safeBut, cancelBut, editBut);
-    });
-    safeBut.addEventListener('click', () => {
-      let newValue ='';
-      if (text === 'Description' || text === 'Notes') {
-        const input = document.getElementById(text);
-        if (text === 'Description') {
-          todo.setDescription(input.value);
-          newValue = todo.getDescription();
-        } else {
-          todo.setNotes(input.value);
-          newValue = todo.getNotes();
-        }
+        todo.setDescription(input.value);
+        newValue = todo.getDescription();
         if (newValue.trim() != '' && newValue.trim() != 'empty') {
           console.log(newValue);
           col2.classList.remove('text-slate-500');
@@ -104,9 +101,9 @@ const expandOneRow = (attribute, text, todo) => {
         }
         input.remove();
         customCol3(col3, safeBut, cancelBut, editBut);
-      }
+      });
     });
-  });
+  }
   return row;
 };
 
