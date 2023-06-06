@@ -7,7 +7,7 @@ import {getCurrentProject} from './projects';
 import {toggleDone} from './workOnTodos';
 import {reallySure} from './domManips';
 import {displayAddTodoForm} from './addTodoForm';
-import {blur, expandMore} from './domManips';
+import {blur, expandMore, insertDetailRowToTableBody} from './domManips';
 
 const loadHeaderMainHeading = () => {
   const heading = document.createElement('h1');
@@ -90,8 +90,7 @@ const loadTodos = (project, tableBody = document.getElementById('tableBody')) =>
           moreBut.addEventListener('click', function expand() {
             const details = expandMore(project.todos[i]);
             for (let j = details.length - 1; j >= 0; j--) {
-              const emptyRow = tableBody.insertRow(row.rowIndex);
-              emptyRow.innerHTML = details[j].innerHTML;
+              insertDetailRowToTableBody(details[j], row.rowIndex);
             }
             moreBut.removeEventListener('click', expand);
             moreBut.addEventListener('click', function minimize() {
