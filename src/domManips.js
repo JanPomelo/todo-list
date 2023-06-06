@@ -8,6 +8,19 @@ const blur = (smth) => {
   smth.classList.toggle('pointer-events-none');
 };
 
+const customCol3 = (col3, safeBut, cancelBut, editBut) => {
+  col3.classList.remove(
+      'flex-col',
+      'md:flex-row',
+      'md:gap-8',
+      'md:justify-start',
+      'h-14',
+  );
+  safeBut.remove();
+  cancelBut.remove();
+  col3.appendChild(editBut);
+};
+
 const expandOneRow = (attribute, text, todo) => {
   const row = document.createElement('tr');
   const col1 = document.createElement('td');
@@ -69,16 +82,7 @@ const expandOneRow = (attribute, text, todo) => {
         col2.innerText = input.defaultValue;
         input.remove();
       }
-      col3.classList.remove(
-          'flex-col',
-          'md:flex-row',
-          'md:gap-8',
-          'md:justify-start',
-          'h-14',
-      );
-      safeBut.remove();
-      cancelBut.remove();
-      col3.appendChild(editBut);
+      customCol3(col3, safeBut, cancelBut, editBut);
     });
     safeBut.addEventListener('click', () => {
       let newValue ='';
@@ -99,16 +103,7 @@ const expandOneRow = (attribute, text, todo) => {
           col2.innerText = 'empty';
         }
         input.remove();
-        col3.classList.remove(
-            'flex-col',
-            'md:flex-row',
-            'md:gap-8',
-            'md:justify-start',
-            'h-14',
-        );
-        safeBut.remove();
-        cancelBut.remove();
-        col3.appendChild(editBut);
+        customCol3(col3, safeBut, cancelBut, editBut);
       }
     });
   });
