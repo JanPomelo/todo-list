@@ -3,6 +3,10 @@
 
 import {deleteTodoFromProject} from './workOnTodos.js';
 
+const patchID = (todo, text) => {
+  return todo.getTitle().concat('-', text);
+};
+
 const blur = (smth) => {
   smth.classList.toggle('blur-md');
   smth.classList.toggle('pointer-events-none');
@@ -17,7 +21,7 @@ const customCol3 = (col3, safeBut, cancelBut, editBut) => {
 
 const makeTDeditable = (id, todo, inputID) => {
   const element = document.getElementById(id);
-  if (id === todo.getTitle().concat('-', 'Description') || id === todo.getTitle().concat('-', 'Notes')) {
+  if (id === patchID(todo, 'Description') || id === patchID(todo, 'Notes')) {
     const input = document.createElement('textarea');
     input.classList = ['max-h-12 h-12 resize-none w-full'];
     input.defaultValue = element.innerText;
@@ -26,8 +30,68 @@ const makeTDeditable = (id, todo, inputID) => {
     element.classList.add('pr-5');
     input.id = inputID;
   }
+  if (id === patchID(todo, 'Title')) {
+    const input = document.createElement('input');
+    input.classList = ['w-full h-full text-sm text-slate-500 py-1'];
+    input.type = 'text';
+    input.defaultValue = element.innerText;
+    element.innerText = '';
+    element.appendChild(input);
+    input.id = inputID;
+  }
 };
 
+const cancelEdit = (todo, col3, safeBut, cancelBut, editBut) => {
+  const descInput = document.getElementById('Description');
+  const descTD = document.getElementById(patchID(todo, 'Description'));
+  descTD.innerText = descInput.defaultValue;
+  descInput.remove();
+  const notesInput = document.getElementById('Notes');
+  const notesTD = document.getElementById(patchID(todo, 'Notes'));
+  notesTD.innerText = notesInput.defaultValue;
+  notesInput.remove();
+  const titleInput = document.getElementById('Title');
+  const titleTD = document.getElementById(patchID(todo, 'Title'));
+  titleTD.innerText = titleInput.defaultValue;
+  titleInput.remove();
+  customCol3(col3, safeBut, cancelBut, editBut);
+};
+
+const safeEdit = (todo, col3, safeBut, cancelBut, editBut) => {
+  const descInput = document.getElementById('Description');
+  const descTD = document.getElementById(patchID(todo, 'Description'));
+  todo.setDescription(descInput.value);
+
+  const notesInput = document.getElementById('Notes');
+  const notesTD = document.getElementById(patchID(todo, 'Notes'));
+  todo.setNotes(notesInput.value);
+
+  const titleInput = document.getElementById('Title');
+  const titleTD = document.getElementById(patchID(todo, 'Title'));
+  if (titleInput.value != '') {
+    todo.setTitle(titleInput.value);
+    titleTD.innerText = titleInput.value;
+  } else {
+    titleTD.innerText = titleInput.defaultValue;
+  }
+  const newChanges = [descInput.value, notesInput.value];
+  const newDisplays = [descTD, notesTD];
+  for (let value = 0; value < newChanges.length; value++) {
+    const newValue = newChanges[value];
+    if (newValue.trim() != '' && newValue.trim() != 'empty') {
+      console.log(newValue);
+      newDisplays[value].classList.remove('text-slate-500');
+      newDisplays[value].innerText = newValue;
+    } else {
+      newDisplays[value].innerText = 'empty';
+      newDisplays[value].classList.add('text-slate-500');
+    }
+  }
+  descInput.remove();
+  notesInput.remove();
+  titleInput.remove();
+  customCol3(col3, safeBut, cancelBut, editBut);
+};
 
 const expandOneRow = (attribute, text, todo) => {
   const row = document.createElement('tr');
@@ -68,52 +132,20 @@ const expandOneRow = (attribute, text, todo) => {
       cancelBut.innerText = 'Cancel';
       safeBut.classList = editBut.classList;
       cancelBut.classList = safeBut.classList;
-      safeBut.classList.add('ml-5', 'mr-auto');
-      cancelBut.classList.add('mr-5', 'ml-auto');
+      safeBut.classList.add();
+      cancelBut.classList.add();
       editBut.remove();
       col3.appendChild(safeBut);
       col3.appendChild(cancelBut);
       col3.classList.add('flex-col', 'md:gap-8');
       makeTDeditable(col1ID, todo, text);
       makeTDeditable(todo.getTitle().concat('-', 'Notes'), todo, 'Notes');
+      makeTDeditable(todo.getTitle().concat('-', 'Title'), todo, 'Title');
       cancelBut.addEventListener('click', () => {
-        const descInput = document.getElementById('Description');
-        const notesInput = document.getElementById('Notes');
-        const descTD = document.getElementById(todo.getTitle().concat('-', 'Description'));
-        const notesTD = document.getElementById(todo.getTitle().concat('-', 'Notes'));
-        descTD.innerText = descInput.defaultValue;
-        notesTD.innerText = notesInput.defaultValue;
-        descInput.remove();
-        notesInput.remove();
-        customCol3(col3, safeBut, cancelBut, editBut);
+        cancelEdit(todo, col3, safeBut, cancelBut, editBut);
       });
       safeBut.addEventListener('click', () => {
-        const descInput = document.getElementById('Description');
-        const notesInput = document.getElementById('Notes');
-        const descTD = document.getElementById(
-            todo.getTitle().concat('-', 'Description'),
-        );
-        const notesTD = document.getElementById(
-            todo.getTitle().concat('-', 'Notes'),
-        );
-        todo.setDescription(descInput.value);
-        todo.setNotes(notesInput.value);
-        const newChanges = [descInput.value, notesInput.value];
-        const newDisplays = [descTD, notesTD];
-        for (let value = 0; value < newChanges.length; value++) {
-          const newValue = newChanges[value];
-          if (newValue.trim() != '' && newValue.trim() != 'empty') {
-            console.log(newValue);
-            newDisplays[value].classList.remove('text-slate-500');
-            newDisplays[value].innerText = newValue;
-          } else {
-            newDisplays[value].innerText = 'empty';
-            newDisplays[value].classList.add('text-slate-500');
-          }
-        }
-        descInput.remove();
-        notesInput.remove();
-        customCol3(col3, safeBut, cancelBut, editBut);
+        safeEdit(todo, col3, safeBut, cancelBut, editBut);
       });
     });
   }

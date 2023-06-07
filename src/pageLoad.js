@@ -67,21 +67,26 @@ const deleteCurrentTab = () => {
 
 const loadTodos = (project, tableBody = document.getElementById('tableBody')) => {
   deleteCurrentTab();
+  tableBody.classList.add('bg-gray-200');
   const allRows = [];
   for (let i = 0; i < project.todos.length; i++) {
     const row = document.createElement('tr');
+    row.classList = ['border-black border-t'];
     for (let j = 0; j < 5; j++) {
       const td = document.createElement('td');
       switch (j) {
         case 0:
           td.innerText = project.todos[i].getTitle();
           td.classList = ['pl-2'];
+          td.id = project.todos[i].getTitle().concat('-', 'Title');
           break;
         case 1:
           td.innerText = project.todos[i].getDueDate();
+          td.id = project.todos[i].getTitle().concat('-', 'DueDate');
           break;
         case 2:
           td.innerText = project.todos[i].getPriority();
+          td.id = project.todos[i].getTitle().concat('-', 'Priority');
           break;
         case 3:
           const moreBut = document.createElement('button');
@@ -165,6 +170,7 @@ const loadTable = () => {
   more.innerText = 'more';
   more.classList = ['w-1/12'];
   const done = document.createElement('th');
+  done.classList = ['w-1/10']
   headerRow.appendChild(title);
   headerRow.appendChild(dueTo);
   headerRow.appendChild(priority);
