@@ -58,6 +58,22 @@ class Todo {
     this.checklist = checkList;
   };
 
+  addItemToChecklist = (item) => {
+    if (item.trim() != '') {
+      this.checklist.push(item);
+      console.log(this.checklist);
+    }
+  };
+
+  deleteItemFromCheckList = (item) => {
+    for (let i = this.checklist.length - 1; i >= 0; i--) {
+      if (item === this.checklist[i]) {
+        this.checklist.splice(i, 1);
+        console.log(this.checklist);
+      }
+    }
+  };
+
   setNotes = (notes) => {
     this.notes = notes;
   };

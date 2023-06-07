@@ -2,9 +2,12 @@
 'use strict';
 
 import {deleteTodoFromProject} from './workOnTodos.js';
+import Plus from './img/plus.png';
+import Muelltonne from './img/mulltonne.png';
 
 
 let editingMode = false;
+let tempSaver = [];
 
 const patchID = (todo, text) => {
   return todo.getTitle().concat('-', text);
@@ -22,13 +25,92 @@ const customCol3 = (col3, safeBut, cancelBut, editBut) => {
   col3.appendChild(editBut);
 };
 
+const createDivForChecklist = (input, todo, fullSave = true) => {
+  const item = document.createElement('div');
+  item.classList = ['flex justify-between items-center'];
+  const text = document.createElement('p');
+  text.innerText = '- ' + input;
+  if (!fullSave) {
+    text.classList = 'text-slate-500';
+  }
+  const deleteBut = document.createElement('button');
+  const deleteImg = document.createElement('img');
+  deleteImg.src = Muelltonne;
+  deleteBut.appendChild(deleteImg);
+  deleteBut.classList = [
+    'bg-white border-black border rounded-md w-3 h-3 p-0.5 deleteButs',
+  ];
+  deleteBut.addEventListener('click', () => {
+    if (fullSave) {
+      todo.deleteItemFromCheckList(input);
+    } else {
+      for (let i = tempSaver.length - 1; i >= 0; i--) {
+        if (input === tempSaver[i]) {
+          tempSaver.splice(i, 1);
+        }
+      }
+    }
+    item.remove();
+  });
+  item.appendChild(text);
+  item.appendChild(deleteBut);
+  return item;
+};
+
+const deleteButToggle = (visible) => {
+  const deleteBut = document.getElementsByClassName('deleteButs');
+  if (deleteBut) {
+    if (visible ==='visible') {
+      for (let i = 0; i < deleteBut.length; i++) {
+        deleteBut[i].classList.remove('invisible');
+      }
+    } else if (visible === 'invisible') {
+      for (let i = 0; i < deleteBut.length; i++) {
+        deleteBut[i].classList.add('invisible');
+      }
+    }
+  }
+};
+
+const displayCheckListItems = (todo, tempSaverDiv = '') => {
+  const oldDiv = document.getElementById(patchID(todo, 'currentChecklist'));
+  if (oldDiv) oldDiv.remove();
+  const checkListCol = document.getElementById(patchID(todo, 'Checklist'));
+  const currentCheckList = todo.getChecklist();
+  const div = document.createElement('div');
+  div.id = patchID(todo, 'currentChecklist');
+  div.classList = ['flex flex-col gap-1'];
+  checkListCol.appendChild(div);
+  if (currentCheckList.length === 0) {
+    if (tempSaverDiv != '') {
+      div.append(tempSaverDiv);
+    } else {
+      div.innerText = 'empty';
+      div.classList.add('text-slate-500');
+    }
+    return;
+  }
+  for (let i = 0; i < currentCheckList.length; i++) {
+    const item = createDivForChecklist(currentCheckList[i], todo);
+    div.appendChild(item);
+  }
+  if (tempSaverDiv != '');
+  div.append(tempSaverDiv);
+  div.classList.remove('text-slate-500');
+  if (div.innerText === '') {
+    div.innerText = 'empty';
+    div.classList.add('text-slate-500');
+  }
+};
+
+
 const makeTDeditable = (id, todo, inputID) => {
   const element = document.getElementById(id);
   let input;
   switch (id) {
     case patchID(todo, 'Title'):
       input = document.createElement('input');
-      input.classList = ['w-full h-7 text-xs text-slate-500 md:text-sm'];
+      input.classList = ['w-full h-7 text-xs text-slate-500 md:text-sm pl-1'];
       input.type = 'text';
       input.defaultValue = element.innerText;
       element.innerText = '';
@@ -47,7 +129,7 @@ const makeTDeditable = (id, todo, inputID) => {
     case patchID(todo, 'Priority'):
       input = document.createElement('select');
       const high = document.createElement('option');
-      input.classList = ['w-full text-xs text-slate-500 h-7 md:text-sm'];
+      input.classList = [' pl-2 w-full text-xs text-slate-500 h-7 md:text-sm'];
       input.defaultValue = element.innerText;
       element.innerText = '';
       element.appendChild(input);
@@ -78,6 +160,41 @@ const makeTDeditable = (id, todo, inputID) => {
       }
       break;
     case patchID(todo, 'Checklist'):
+      const existingDiv = document.getElementById(patchID(todo, 'currentChecklist'));
+      console.log(existingDiv);
+      const container = document.createElement('div');
+      input = document.createElement('input');
+      const button = document.createElement('button');
+      const butImg = document.createElement('img');
+      butImg.src = Plus;
+      button.appendChild(butImg);
+      container.classList = ['flex gap-2 items-center'];
+      input.classList = ['h-7 text-xs text-slate-500 md:text-sm pr-5 w-full'];
+      button.classList = ['bg-white border-black border rounded-md w-3 h-3 p-0.5'];
+      close.classlist = button.classList;
+      container.appendChild(input);
+      container.appendChild(button);
+      input.type = 'text';
+      existingDiv.appendChild(container);
+      container.id = inputID;
+      button.addEventListener('click', () => {
+        tempSaver.push(input.value);
+        let tempSaverDiv = document.getElementById('tempSaverDiv');
+        if (tempSaverDiv) {
+          tempSaverDiv.remove();
+        }
+        tempSaverDiv = document.createElement('div');
+        tempSaverDiv.id = 'tempSaverDiv';
+        tempSaverDiv.classList = ['flex flex-col gap-1 my-1'];
+        for (let i = 0; i < tempSaver.length; i++) {
+          const item = createDivForChecklist(tempSaver[i], todo, false);
+          tempSaverDiv.appendChild(item);
+          container.appendChild(input);
+          container.appendChild(button);
+        }
+        displayCheckListItems(todo, tempSaverDiv);
+        makeTDeditable(id, todo, inputID);
+      });
       break;
     default:
       input = document.createElement('textarea');
@@ -85,7 +202,6 @@ const makeTDeditable = (id, todo, inputID) => {
       input.defaultValue = element.innerText;
       element.innerText = '';
       element.appendChild(input);
-      element.classList.add('pr-5');
       input.id = inputID;
       break;
   }
@@ -96,6 +212,7 @@ const rebuildOriginalTodoInfos = (todo, property) => {
   const td = document.getElementById(patchID(todo, property));
   td.innerText = input.defaultValue;
   input.remove();
+  tempSaver = [];
 };
 
 const cancelEdit = (todo) => {
@@ -104,6 +221,9 @@ const cancelEdit = (todo) => {
   rebuildOriginalTodoInfos(todo, 'Title');
   rebuildOriginalTodoInfos(todo, 'DueDate');
   rebuildOriginalTodoInfos(todo, 'Priority');
+  displayCheckListItems(todo);
+  editingMode = false;
+  deleteButToggle('invisible');
 };
 
 const safeEdit = (todo, col3, safeBut, cancelBut, editBut) => {
@@ -134,6 +254,21 @@ const safeEdit = (todo, col3, safeBut, cancelBut, editBut) => {
   todo.setPriority(priorityInput.value);
   priorityTD.innerText = priorityInput.value;
 
+  const checkListInput = document.getElementById('Checklist');
+  if (checkListInput) {
+    checkListInput.remove();
+  }
+  if (tempSaver.length > 0) {
+    const checkListInput = document.getElementById('Checklist');
+    if (checkListInput) {
+    }
+    for (let i = 0; i < tempSaver.length; i++) {
+      todo.addItemToChecklist(tempSaver[i]);
+    }
+    displayCheckListItems(todo, '');
+    tempSaver = [];
+  }
+
   const newChanges = [descInput.value, notesInput.value];
   const newDisplays = [descTD, notesTD];
   for (let value = 0; value < newChanges.length; value++) {
@@ -147,6 +282,7 @@ const safeEdit = (todo, col3, safeBut, cancelBut, editBut) => {
       newDisplays[value].classList.add('text-slate-500');
     }
   }
+  deleteButToggle('invisible');
   descInput.remove();
   notesInput.remove();
   titleInput.remove();
@@ -164,18 +300,23 @@ const expandOneRow = (attribute, text, todo) => {
   col1.classList = ['pl-4 text-xs md:text-sm bg-gray-100'];
   col2.classList = ['text-xs md:text-sm bg-gray-100'];
   col1.innerText = text;
-  if (attribute) {
-    if (attribute != 'empty') {
-      col2.innerText = attribute;
+  if (text != 'Checklist') {
+    if (attribute) {
+      {
+        if (attribute != 'empty') {
+          col2.innerText = attribute;
+        } else {
+          col2.innerText = 'empty';
+          col2.classList.add('text-slate-500');
+        }
+      }
     } else {
       col2.innerText = 'empty';
       col2.classList.add('text-slate-500');
     }
-  } else {
-    col2.innerText = 'empty';
-    col2.classList.add('text-slate-500');
   }
-  col2.colSpan = 3;
+
+  col2.colSpan = 2;
   row.appendChild(col1);
   row.appendChild(col2);
   if (text === 'Description') {
@@ -186,9 +327,11 @@ const expandOneRow = (attribute, text, todo) => {
     col3.classList = ['bg-gray-100 h-full'];
     col3.appendChild(editBut);
     col3.rowSpan = 3;
+    col3.colSpan = 2;
     row.appendChild(col3);
     editBut.addEventListener('click', () => {
       editingMode = true;
+      deleteButToggle('visible');
       const safeBut = document.createElement('button');
       const cancelBut = document.createElement('button');
       const testDiv = document.createElement('div');
@@ -208,6 +351,7 @@ const expandOneRow = (attribute, text, todo) => {
       makeTDeditable(patchID(todo, 'Title'), todo, 'Title');
       makeTDeditable(patchID(todo, 'DueDate'), todo, 'DueDate');
       makeTDeditable(patchID(todo, 'Priority'), todo, 'Priority');
+      makeTDeditable(patchID(todo, 'Checklist'), todo, 'Checklist');
       cancelBut.addEventListener('click', () => {
         editingMode = false;
         cancelEdit(todo);
@@ -284,4 +428,4 @@ const insertDetailRowToTableBody = (row, index) => {
 };
 
 
-export {reallySure, blur, expandMore, insertDetailRowToTableBody, cancelEdit, editingMode};
+export {reallySure, blur, expandMore, insertDetailRowToTableBody, cancelEdit, editingMode, displayCheckListItems, deleteButToggle};

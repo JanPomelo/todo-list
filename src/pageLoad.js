@@ -5,9 +5,9 @@ import replay from './img/replay.png';
 import muellTonne from './img/mulltonne.png';
 import {getCurrentProject} from './projects';
 import {toggleDone} from './workOnTodos';
-import {reallySure} from './domManips';
+import {displayCheckListItems, reallySure} from './domManips';
 import {displayAddTodoForm} from './addTodoForm';
-import {blur, expandMore, insertDetailRowToTableBody, cancelEdit, editingMode} from './domManips';
+import {blur, expandMore, insertDetailRowToTableBody, cancelEdit, editingMode, deleteButToggle} from './domManips';
 
 const loadHeaderMainHeading = () => {
   const heading = document.createElement('h1');
@@ -97,7 +97,9 @@ const loadTodos = (project, tableBody = document.getElementById('tableBody')) =>
             for (let j = details.length - 1; j >= 0; j--) {
               insertDetailRowToTableBody(details[j], row.rowIndex);
             }
+            displayCheckListItems(project.todos[i]);
             moreBut.removeEventListener('click', expand);
+            deleteButToggle('invisible');
             moreBut.addEventListener('click', function minimize() {
               if (editingMode) {
                 cancelEdit(project.todos[i]);
