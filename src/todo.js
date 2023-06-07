@@ -67,12 +67,12 @@ class Todo {
   };
 }
 
-const todo1 = new Todo('Todo erstellen', 'today', 'high');
+const todo1 = new Todo('Todo erstellen', '2023-06-24', 'high');
 
 const todo2 = new Todo(
     'Todo loeschen',
-    'today',
-    'high',
+    '2023-06-14',
+    'medium',
     'Todo loeschen halt ne',
 );
 

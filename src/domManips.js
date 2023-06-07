@@ -3,6 +3,9 @@
 
 import {deleteTodoFromProject} from './workOnTodos.js';
 
+
+let editingMode = false;
+
 const patchID = (todo, text) => {
   return todo.getTitle().concat('-', text);
 };
@@ -21,40 +24,62 @@ const customCol3 = (col3, safeBut, cancelBut, editBut) => {
 
 const makeTDeditable = (id, todo, inputID) => {
   const element = document.getElementById(id);
-  if (id === patchID(todo, 'Description') || id === patchID(todo, 'Notes')) {
-    const input = document.createElement('textarea');
-    input.classList = ['max-h-12 h-12 resize-none w-full'];
-    input.defaultValue = element.innerText;
-    element.innerText = '';
-    element.appendChild(input);
-    element.classList.add('pr-5');
-    input.id = inputID;
-  }
-  if (id === patchID(todo, 'Title')) {
-    const input = document.createElement('input');
-    input.classList = ['w-full h-full text-sm text-slate-500 py-1'];
-    input.type = 'text';
-    input.defaultValue = element.innerText;
-    element.innerText = '';
-    element.appendChild(input);
-    input.id = inputID;
+  let input;
+  switch (id) {
+    case patchID(todo, 'Title'):
+      input = document.createElement('input');
+      input.classList = ['w-full h-full text-xs text-slate-500 py-1.5 md:text-sm'];
+      input.type = 'text';
+      input.defaultValue = element.innerText;
+      element.innerText = '';
+      element.appendChild(input);
+      input.id = inputID;
+      break;
+    case patchID(todo, 'DueDate'):
+      input = document.createElement('input');
+      input.type = 'date';
+      input.classList = ['text-xs md:text-sm text-slate-500 py-1 DueDateMinWidth'];
+      input.defaultValue = element.innerText;
+      element.innerText = '';
+      element.appendChild(input);
+      input.id = inputID;
+      break;
+    case patchID(todo, 'Priority'):
+      break;
+    case patchID(todo, 'Checklist'):
+      break;
+    default:
+      input = document.createElement('textarea');
+      input.classList = ['max-h-12 h-12 resize-none text-xs w-full'];
+      input.defaultValue = element.innerText;
+      element.innerText = '';
+      element.appendChild(input);
+      element.classList.add('pr-5');
+      input.id = inputID;
+      break;
   }
 };
 
-const cancelEdit = (todo, col3, safeBut, cancelBut, editBut) => {
+const cancelEdit = (todo) => {
   const descInput = document.getElementById('Description');
   const descTD = document.getElementById(patchID(todo, 'Description'));
   descTD.innerText = descInput.defaultValue;
   descInput.remove();
+
   const notesInput = document.getElementById('Notes');
   const notesTD = document.getElementById(patchID(todo, 'Notes'));
   notesTD.innerText = notesInput.defaultValue;
   notesInput.remove();
+
   const titleInput = document.getElementById('Title');
   const titleTD = document.getElementById(patchID(todo, 'Title'));
   titleTD.innerText = titleInput.defaultValue;
   titleInput.remove();
-  customCol3(col3, safeBut, cancelBut, editBut);
+
+  const dueDateInput = document.getElementById('DueDate');
+  const dueDateID = document.getElementById(patchID(todo, 'DueDate'));
+  dueDateID.innerText = dueDateInput.defaultValue;
+  dueDateInput.remove();
 };
 
 const safeEdit = (todo, col3, safeBut, cancelBut, editBut) => {
@@ -74,6 +99,12 @@ const safeEdit = (todo, col3, safeBut, cancelBut, editBut) => {
   } else {
     titleTD.innerText = titleInput.defaultValue;
   }
+
+  const dueDateInput = document.getElementById('DueDate');
+  const dueDateTD = document.getElementById(patchID(todo, 'DueDate'));
+  todo.setDueDate(dueDateInput.value);
+  dueDateTD.innerText = dueDateInput.value;
+
   const newChanges = [descInput.value, notesInput.value];
   const newDisplays = [descTD, notesTD];
   for (let value = 0; value < newChanges.length; value++) {
@@ -90,6 +121,7 @@ const safeEdit = (todo, col3, safeBut, cancelBut, editBut) => {
   descInput.remove();
   notesInput.remove();
   titleInput.remove();
+  dueDateInput.remove();
   customCol3(col3, safeBut, cancelBut, editBut);
 };
 
@@ -99,8 +131,8 @@ const expandOneRow = (attribute, text, todo) => {
   const col1ID = todo.getTitle().concat('-', text);
   const col2 = document.createElement('td');
   col2.id = col1ID;
-  col1.classList = ['pl-4 text-sm bg-gray-100'];
-  col2.classList = ['text-sm bg-gray-100'];
+  col1.classList = ['pl-4 text-xs md:text-sm bg-gray-100'];
+  col2.classList = ['text-xs md:text-sm bg-gray-100'];
   col1.innerText = text;
   if (attribute) {
     if (attribute != 'empty') {
@@ -119,15 +151,17 @@ const expandOneRow = (attribute, text, todo) => {
   if (text === 'Description') {
     const editBut = document.createElement('button');
     editBut.innerText = 'edit';
-    editBut.classList = ['text-xs border-black border rounded-lg px-1'];
+    editBut.classList = ['text-xs border-black border rounded-lg px-1 w-12'];
     const col3 = document.createElement('td');
-    col3.classList = ['py-1 bg-gray-100 flex-col justify-center items-center'];
+    col3.classList = ['bg-gray-100 h-full'];
     col3.appendChild(editBut);
     col3.rowSpan = 3;
     row.appendChild(col3);
     editBut.addEventListener('click', () => {
+      editingMode = true;
       const safeBut = document.createElement('button');
       const cancelBut = document.createElement('button');
+      const testDiv = document.createElement('div');
       safeBut.innerText = 'Safe';
       cancelBut.innerText = 'Cancel';
       safeBut.classList = editBut.classList;
@@ -135,16 +169,21 @@ const expandOneRow = (attribute, text, todo) => {
       safeBut.classList.add();
       cancelBut.classList.add();
       editBut.remove();
-      col3.appendChild(safeBut);
-      col3.appendChild(cancelBut);
-      col3.classList.add('flex-col', 'md:gap-8');
+      testDiv.appendChild(safeBut);
+      testDiv.appendChild(cancelBut);
+      col3.appendChild(testDiv);
+      testDiv.classList.add('grid', 'gap-2', 'justify-center', 'items-center');
       makeTDeditable(col1ID, todo, text);
-      makeTDeditable(todo.getTitle().concat('-', 'Notes'), todo, 'Notes');
-      makeTDeditable(todo.getTitle().concat('-', 'Title'), todo, 'Title');
+      makeTDeditable(patchID(todo, 'Notes'), todo, 'Notes');
+      makeTDeditable(patchID(todo, 'Title'), todo, 'Title');
+      makeTDeditable(patchID(todo, 'DueDate'), todo, 'DueDate');
       cancelBut.addEventListener('click', () => {
-        cancelEdit(todo, col3, safeBut, cancelBut, editBut);
+        editingMode = false;
+        cancelEdit(todo);
+        customCol3(col3, safeBut, cancelBut, editBut);
       });
       safeBut.addEventListener('click', () => {
+        editingMode = false;
         safeEdit(todo, col3, safeBut, cancelBut, editBut);
       });
     });
@@ -214,4 +253,4 @@ const insertDetailRowToTableBody = (row, index) => {
 };
 
 
-export {reallySure, blur, expandMore, insertDetailRowToTableBody};
+export {reallySure, blur, expandMore, insertDetailRowToTableBody, cancelEdit, editingMode};

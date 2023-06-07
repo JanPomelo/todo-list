@@ -7,7 +7,7 @@ import {getCurrentProject} from './projects';
 import {toggleDone} from './workOnTodos';
 import {reallySure} from './domManips';
 import {displayAddTodoForm} from './addTodoForm';
-import {blur, expandMore, insertDetailRowToTableBody} from './domManips';
+import {blur, expandMore, insertDetailRowToTableBody, cancelEdit, editingMode} from './domManips';
 
 const loadHeaderMainHeading = () => {
   const heading = document.createElement('h1');
@@ -67,7 +67,7 @@ const deleteCurrentTab = () => {
 
 const loadTodos = (project, tableBody = document.getElementById('tableBody')) => {
   deleteCurrentTab();
-  tableBody.classList.add('bg-gray-200');
+  tableBody.classList.add('bg-gray-200', 'text-sm', 'md:text-base');
   const allRows = [];
   for (let i = 0; i < project.todos.length; i++) {
     const row = document.createElement('tr');
@@ -99,6 +99,9 @@ const loadTodos = (project, tableBody = document.getElementById('tableBody')) =>
             }
             moreBut.removeEventListener('click', expand);
             moreBut.addEventListener('click', function minimize() {
+              if (editingMode) {
+                cancelEdit(project.todos[i]);
+              }
               for (let j = details.length - 1; j >= 0; j--) {
                 tableBody.deleteRow(row.rowIndex);
               }
@@ -159,18 +162,18 @@ const loadTable = () => {
   headerRow.classList = ['bg-blue-100'];
   const title = document.createElement('th');
   title.classList = ['w-1/3 pl-2'];
-  title.innerText = 'Title';
+  title.innerText = 'TITLE';
   const dueTo = document.createElement('th');
-  dueTo.innerText = 'Due';
+  dueTo.innerText = 'DUE';
   dueTo.classList = ['w-1/4'];
   const priority = document.createElement('th');
-  priority.innerText = 'Priority';
-  priority.classList = ['w-1/6'];
+  priority.innerText = 'PRIO';
+  priority.classList = ['w-20'];
   const more = document.createElement('th');
-  more.innerText = 'more';
-  more.classList = ['w-1/12'];
+  more.innerText = '...';
+  more.classList = ['w-6'];
   const done = document.createElement('th');
-  done.classList = ['w-1/10']
+  done.classList = ['w-1/10 md:w-1/6'];
   headerRow.appendChild(title);
   headerRow.appendChild(dueTo);
   headerRow.appendChild(priority);

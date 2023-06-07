@@ -55,3 +55,15 @@ form,
 input[type='date'] {
 	font-family: 'Quicksand';
 }
+
+@media screen and (max-width: 500px) {
+	.DueDateMinWidth {
+		width: 5.5rem;
+	}
+}
+
+@media screen and (max-width: 500px) {
+	.moreCol {
+		width: 4rem
+	}
+}
