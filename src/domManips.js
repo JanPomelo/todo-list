@@ -28,7 +28,7 @@ const makeTDeditable = (id, todo, inputID) => {
   switch (id) {
     case patchID(todo, 'Title'):
       input = document.createElement('input');
-      input.classList = ['w-full h-full text-xs text-slate-500 py-1.5 md:text-sm'];
+      input.classList = ['w-full h-7 text-xs text-slate-500 md:text-sm'];
       input.type = 'text';
       input.defaultValue = element.innerText;
       element.innerText = '';
@@ -38,13 +38,44 @@ const makeTDeditable = (id, todo, inputID) => {
     case patchID(todo, 'DueDate'):
       input = document.createElement('input');
       input.type = 'date';
-      input.classList = ['text-xs md:text-sm text-slate-500 py-1 DueDateMinWidth'];
+      input.classList = ['text-xs md:text-sm text-slate-500 h-7 py-1 DueDateMinWidth md:w-full'];
       input.defaultValue = element.innerText;
       element.innerText = '';
       element.appendChild(input);
       input.id = inputID;
       break;
     case patchID(todo, 'Priority'):
+      input = document.createElement('select');
+      const high = document.createElement('option');
+      input.classList = ['w-full text-xs text-slate-500 h-7 md:text-sm'];
+      input.defaultValue = element.innerText;
+      element.innerText = '';
+      element.appendChild(input);
+      input.id = inputID;
+      high.value = 'high';
+      high.innerText = 'high';
+      const medium = document.createElement('option');
+      medium.value = 'medium';
+      medium.innerText = 'medium';
+      const low = document.createElement('option');
+      low.value = 'low';
+      low.innerText = 'low';
+      input.appendChild(low);
+      input.appendChild(medium);
+      input.appendChild(high);
+      switch (input.defaultValue) {
+        case 'high':
+          high.selected = true;
+          break;
+        case 'medium':
+          medium.selected = true;
+          break;
+        case 'low':
+          low.selected = true;
+          break;
+        default:
+          break;
+      }
       break;
     case patchID(todo, 'Checklist'):
       break;
@@ -60,26 +91,19 @@ const makeTDeditable = (id, todo, inputID) => {
   }
 };
 
+const rebuildOriginalTodoInfos = (todo, property) => {
+  const input = document.getElementById(property);
+  const td = document.getElementById(patchID(todo, property));
+  td.innerText = input.defaultValue;
+  input.remove();
+};
+
 const cancelEdit = (todo) => {
-  const descInput = document.getElementById('Description');
-  const descTD = document.getElementById(patchID(todo, 'Description'));
-  descTD.innerText = descInput.defaultValue;
-  descInput.remove();
-
-  const notesInput = document.getElementById('Notes');
-  const notesTD = document.getElementById(patchID(todo, 'Notes'));
-  notesTD.innerText = notesInput.defaultValue;
-  notesInput.remove();
-
-  const titleInput = document.getElementById('Title');
-  const titleTD = document.getElementById(patchID(todo, 'Title'));
-  titleTD.innerText = titleInput.defaultValue;
-  titleInput.remove();
-
-  const dueDateInput = document.getElementById('DueDate');
-  const dueDateID = document.getElementById(patchID(todo, 'DueDate'));
-  dueDateID.innerText = dueDateInput.defaultValue;
-  dueDateInput.remove();
+  rebuildOriginalTodoInfos(todo, 'Description');
+  rebuildOriginalTodoInfos(todo, 'Notes');
+  rebuildOriginalTodoInfos(todo, 'Title');
+  rebuildOriginalTodoInfos(todo, 'DueDate');
+  rebuildOriginalTodoInfos(todo, 'Priority');
 };
 
 const safeEdit = (todo, col3, safeBut, cancelBut, editBut) => {
@@ -105,6 +129,11 @@ const safeEdit = (todo, col3, safeBut, cancelBut, editBut) => {
   todo.setDueDate(dueDateInput.value);
   dueDateTD.innerText = dueDateInput.value;
 
+  const priorityInput = document.getElementById('Priority');
+  const priorityTD = document.getElementById(patchID(todo, 'Priority'));
+  todo.setPriority(priorityInput.value);
+  priorityTD.innerText = priorityInput.value;
+
   const newChanges = [descInput.value, notesInput.value];
   const newDisplays = [descTD, notesTD];
   for (let value = 0; value < newChanges.length; value++) {
@@ -122,6 +151,7 @@ const safeEdit = (todo, col3, safeBut, cancelBut, editBut) => {
   notesInput.remove();
   titleInput.remove();
   dueDateInput.remove();
+  priorityInput.remove();
   customCol3(col3, safeBut, cancelBut, editBut);
 };
 
@@ -177,6 +207,7 @@ const expandOneRow = (attribute, text, todo) => {
       makeTDeditable(patchID(todo, 'Notes'), todo, 'Notes');
       makeTDeditable(patchID(todo, 'Title'), todo, 'Title');
       makeTDeditable(patchID(todo, 'DueDate'), todo, 'DueDate');
+      makeTDeditable(patchID(todo, 'Priority'), todo, 'Priority');
       cancelBut.addEventListener('click', () => {
         editingMode = false;
         cancelEdit(todo);
