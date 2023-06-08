@@ -2,7 +2,7 @@
 'use strict';
 
 import closeImg from './img/close.png';
-import {getAllProjects, getCurrentProject} from './projects.js';
+import {getAllProjects, getCurrentProject, setAllProjects} from './projects.js';
 import {loadTodos} from './pageLoad.js';
 import {createNewTodo} from './workOnTodos';
 import {blur} from './domManips';
@@ -48,11 +48,15 @@ const checkForm = (form, title, date) => {
   } else {
     const main = document.getElementById('main');
     blur(main);
-    const project = getCurrentProject();
+    const allProjects = getAllProjects();
     const todo = createNewTodo();
-    project.addTodo(todo);
-    // createNewTodo();
-    loadTodos(project);
+    for (let i = 0; i < allProjects.length; i++) {
+      if (form.projects.value === allProjects[i].name) {
+        allProjects[i].addTodo(todo);
+      }
+    }
+    setAllProjects(allProjects);
+    loadTodos(getCurrentProject());
     form.remove();
   }
 };

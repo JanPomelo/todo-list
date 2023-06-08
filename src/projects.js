@@ -24,7 +24,16 @@ class Project {
   };
 }
 let currentProject = '';
-const allProjects = [];
+let allProjects = [];
+
+const addTodoToNewProject = (todo, projectName) => {
+  for (let i = 0; i < allProjects.length; i++) {
+    if (projectName === allProjects[i].getName()) {
+      allProjects[i].todos.push(todo);
+    }
+  }
+  console.log(allProjects);
+};
 
 const getCurrentProject = () => {
   return currentProject;
@@ -41,7 +50,9 @@ const addToProjects = (project) => {
 const getAllProjects = () => {
   return allProjects;
 };
-
+const setAllProjects = (newProjects) => {
+  allProjects = newProjects;
+};
 const deleteProject = (project) => {
   for (let i = project.todos.length -1; i >= 0; i--) {
     delete project.todos[i];
@@ -64,4 +75,4 @@ inbox.addTodo(todo2);
 
 currentProject = inbox;
 
-export {getAllProjects, deleteProject, addToProjects, Project, getCurrentProject, setCurrentProject};
+export {getAllProjects, setAllProjects, addTodoToNewProject, deleteProject, addToProjects, Project, getCurrentProject, setCurrentProject};

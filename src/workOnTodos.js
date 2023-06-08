@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 'use strict';
 import {loadTodos} from './pageLoad';
+import {addTodoToNewProject} from './projects';
 import {Todo} from './todo';
 
 
@@ -30,7 +31,7 @@ const createNewTodo = () => {
       todo.setChecklist([form.checklist.value]);
     }
   }
-  console.log(todo);
+  addTodoToNewProject(todo, todo.getProject());
   return todo;
 };
 const deleteTodoFromProject = (project, todo) => {

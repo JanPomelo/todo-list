@@ -4,6 +4,7 @@
 import {deleteTodoFromProject} from './workOnTodos.js';
 import Plus from './img/plus.png';
 import Muelltonne from './img/mulltonne.png';
+import {addTodoToNewProject, getAllProjects, getCurrentProject, setCurrentProject} from './projects.js';
 
 
 let editingMode = false;
@@ -156,6 +157,24 @@ const makeTDeditable = (id, todo, inputID) => {
           break;
       }
       break;
+    case patchID(todo, 'Project'):
+      input = document.createElement('select');
+      input.classList = ['w-full text-xs text-slate-500 h-7 md:text-sm'];
+      input.defaultValue = element.innerText;
+      element.innerText = '';
+      element.appendChild(input);
+      input.id = inputID;
+      const projects = getAllProjects();
+      for (let i = 2; i < projects.length; i++) {
+        const option = document.createElement('option');
+        option.value = projects[i].getName();
+        option.innerText = option.value;
+        input.appendChild(option);
+        if (input.defaultValue === option.value) {
+          option.selected = true;
+        }
+      }
+      break;
     case patchID(todo, 'Checklist'):
       const existingDiv = document.getElementById(patchID(todo, 'currentChecklist'));
       console.log(existingDiv);
@@ -215,6 +234,7 @@ const rebuildOriginalTodoInfos = (todo, property) => {
 const cancelEdit = (todo) => {
   rebuildOriginalTodoInfos(todo, 'Description');
   rebuildOriginalTodoInfos(todo, 'Notes');
+  rebuildOriginalTodoInfos(todo, 'Project');
   rebuildOriginalTodoInfos(todo, 'Title');
   rebuildOriginalTodoInfos(todo, 'DueDate');
   rebuildOriginalTodoInfos(todo, 'Priority');
@@ -280,7 +300,18 @@ const safeEdit = (todo, col3, safeBut, cancelBut, editBut) => {
     }
   }
   deleteButToggle('invisible');
+  const projectInput = document.getElementById('Project');
+  const projectTD = document.getElementById(patchID(todo, 'Project'));
+  if (projectInput.innerText != todo.getProject()) {
+    const project = getCurrentProject();
+    deleteTodoFromProject(project, todo);
+    setCurrentProject(project);
+    addTodoToNewProject(todo, todo.getProject());
+  }
+  todo.setProject(projectInput.value);
+  projectTD.innerText = projectInput.value;
   descInput.remove();
+  projectInput.remove();
   notesInput.remove();
   titleInput.remove();
   dueDateInput.remove();
@@ -316,14 +347,17 @@ const expandOneRow = (attribute, text, todo) => {
   col2.colSpan = 2;
   row.appendChild(col1);
   row.appendChild(col2);
-  if (text === 'Description') {
+  if (text === 'Project') {
     const editBut = document.createElement('button');
     editBut.innerText = 'edit';
     editBut.classList = ['text-xs border-black border rounded-lg px-1 w-12'];
     const col3 = document.createElement('td');
+    const editButDiv = document.createElement('div');
+    editButDiv.classList = ['h-full w-full flex justify-center items-center'];
     col3.classList = ['bg-gray-100 h-full'];
-    col3.appendChild(editBut);
-    col3.rowSpan = 3;
+    col3.appendChild(editButDiv);
+    editButDiv.appendChild(editBut);
+    col3.rowSpan = 4;
     col3.colSpan = 2;
     row.appendChild(col3);
     editBut.addEventListener('click', () => {
@@ -343,12 +377,13 @@ const expandOneRow = (attribute, text, todo) => {
       testDiv.appendChild(cancelBut);
       col3.appendChild(testDiv);
       testDiv.classList.add('grid', 'gap-2', 'justify-center', 'items-center');
-      makeTDeditable(col1ID, todo, text);
+      makeTDeditable(patchID(todo, 'Description'), todo, 'Description');
       makeTDeditable(patchID(todo, 'Notes'), todo, 'Notes');
       makeTDeditable(patchID(todo, 'Title'), todo, 'Title');
       makeTDeditable(patchID(todo, 'DueDate'), todo, 'DueDate');
       makeTDeditable(patchID(todo, 'Priority'), todo, 'Priority');
       makeTDeditable(patchID(todo, 'Checklist'), todo, 'Checklist');
+      makeTDeditable(patchID(todo, 'Project'), todo, 'Project');
       cancelBut.addEventListener('click', () => {
         editingMode = false;
         cancelEdit(todo);
@@ -364,7 +399,8 @@ const expandOneRow = (attribute, text, todo) => {
 };
 
 const expandMore = (todo) => {
-  const more = [expandOneRow(todo.getDescription(), 'Description', todo)];
+  const more = [expandOneRow(todo.getProject(), 'Project', todo)];
+  more.push(expandOneRow(todo.getDescription(), 'Description', todo));
   more.push(expandOneRow(todo.getNotes(), 'Notes', todo));
   more.push(expandOneRow(todo.getChecklist(), 'Checklist', todo));
 
