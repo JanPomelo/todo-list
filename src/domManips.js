@@ -87,19 +87,16 @@ const displayCheckListItems = (todo, tempSaverDiv = '') => {
     } else {
       div.innerText = 'empty';
       div.classList.add('text-slate-500');
+      return;
     }
-    return;
   }
   for (let i = 0; i < currentCheckList.length; i++) {
     const item = createDivForChecklist(currentCheckList[i], todo);
     div.appendChild(item);
   }
-  if (tempSaverDiv != '');
-  div.append(tempSaverDiv);
-  div.classList.remove('text-slate-500');
-  if (div.innerText === '') {
-    div.innerText = 'empty';
-    div.classList.add('text-slate-500');
+  if (tempSaverDiv != '') {
+    div.append(tempSaverDiv);
+    div.classList.remove('text-slate-500');
   }
 };
 

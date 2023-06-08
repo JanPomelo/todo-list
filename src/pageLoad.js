@@ -8,6 +8,7 @@ import {toggleDone} from './workOnTodos';
 import {displayCheckListItems, reallySure} from './domManips';
 import {displayAddTodoForm} from './addTodoForm';
 import {blur, expandMore, insertDetailRowToTableBody, cancelEdit, editingMode, deleteButToggle} from './domManips';
+import {loadProjectEditWindow} from './projectsEditWindow';
 
 const loadHeaderMainHeading = () => {
   const heading = document.createElement('h1');
@@ -18,7 +19,7 @@ const loadHeaderMainHeading = () => {
 
 const loadHeaderSubHeading = () => {
   const subHeading = document.createElement('h2');
-  subHeading.innerText = 'The minimalistic To-Do-List.';
+  subHeading.innerText = 'The smart To-Do-List.';
   subHeading.classList = ['text-white text-xl mb-1'];
   return subHeading;
 };
@@ -34,9 +35,38 @@ const loadHeader = () => {
   return header;
 };
 
+const loadProjectHeading = () => {
+  const div = document.createElement('div');
+  div.classList = ['w-full flex flex-row gap-3 pl-2 pt-1 pb-1 items-center justify-between pr-2 row-span-2 sm:bg-blue-100 sm:rounded-l-3xl sm:flex-col'];
+  div.id = 'headingProjects';
+  const textDiv = document.createElement('div');
+  textDiv.classList = ['flex gap-1 items-center sm:absolute sm:invisible sm:pointer-events-none'];
+  const heading = document.createElement('h2');
+  heading.innerText = 'Current Project:';
+  heading.classList = ['font-bold underline'];
+  const text = document.createElement('p');
+  text.innerText = getCurrentProject().getName();
+  text.classList = ['font-bold'];
+  const button = document.createElement('button');
+  button.innerText = 'Edit Projects';
+  button.classList = [
+    'rounded-xl border-black border-2 pl-2 pr-2 active:shadow-md active:shadow-indigo-500 sm:absolute sm:invisible sm:pointer-events-none',
+  ];
+  button.addEventListener('click', () => {
+    loadProjectEditWindow();
+  });
+  textDiv.appendChild(heading);
+  textDiv.appendChild(text);
+  div.appendChild(textDiv);
+  div.appendChild(button);
+  // div.appendChild(loadProjectEditWindow());
+  return div;
+};
+
+
 const loadToDoHeading = () => {
   const div = document.createElement('div');
-  div.classList = ['w-full flex flex-row gap-3 pl-2 pt-1 pb-1 items-center'];
+  div.classList = ['w-full flex flex-row gap-3 pl-2 pt-1 pb-1 items-center justify-between pr-2 col-span-3'];
   const text = document.createElement('h3');
   text.innerText = 'Your To-Dos:';
   text.classList = ['font-bold'];
@@ -154,7 +184,7 @@ const loadTodos = (project, tableBody = document.getElementById('tableBody')) =>
 
 const loadTable = () => {
   const table = document.createElement('table');
-  table.classList = ['w-full text-left'];
+  table.classList = ['w-full text-left col-span-3'];
   const tableHeader = document.createElement('thead');
   table.appendChild(tableHeader);
   const tableBody = document.createElement('tbody');
@@ -187,24 +217,27 @@ const loadTable = () => {
 };
 
 
-const loadToDoDiv = () => {
+const loadWrapperDiv = () => {
+  const bigDiv = document.createElement('div');
   const todoDiv = document.createElement('div');
-  todoDiv.classList = [
-    'h-full w-full flex flex-col sm:rounded-3xl sm:border-4 border-black sm:h-4/5 sm:w-full bg-white shadow-gray-950 sm:shadow-xl sm:shadow-gray-950',
+  bigDiv.classList = [
+    'h-full w-full flex flex-col sm:rounded-3xl sm:border-4 border-black sm:h-4/5 sm:w-full bg-white shadow-gray-950 sm:shadow-xl sm:shadow-gray-950 sm:grid sm:grid-cols-4',
   ];
+  todoDiv.classList = ['sm:col-span-3'];
+  bigDiv.appendChild(loadProjectHeading());
   todoDiv.appendChild(loadToDoHeading());
   todoDiv.appendChild(loadTable());
-  return todoDiv;
+  bigDiv.appendChild(todoDiv);
+  return bigDiv;
 };
 
 const loadMain = () => {
   const main = document.createElement('main');
   main.classList = ['flex-grow bg-grey-100 flex justify-center items-center sm:pl-5 sm:pr-5 xl:pr-20 xl:pl-20'];
   main.id = 'main';
-  main.appendChild(loadToDoDiv());
+  main.appendChild(loadWrapperDiv());
   return main;
 };
-
 const loadFooterText1 = () => {
   const text = document.createElement('p');
   text.innerText = 'A Project from JanPomelo';

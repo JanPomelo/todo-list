@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable require-jsdoc */
 import {todo1, todo2} from './todo';
 
@@ -8,6 +9,10 @@ class Project {
   }
   addTodo = (todo) => {
     this.todos.push(todo);
+  };
+
+  getName = () => {
+    return this.name;
   };
 
   deleteTodo = (todo) => {
@@ -28,11 +33,24 @@ const getCurrentProject = () => {
 const setCurrentProject = (project) => {
   currentProject = project;
 };
+
+const addToProjects = (project) => {
+  allProjects.push(project);
+};
+
+const getAllProjects = () => {
+  return allProjects;
+};
+
 const inbox = new Project('Inbox');
+const today = new Project('Today');
+const thisWeek = new Project('This Week');
 allProjects.push(inbox);
+allProjects.push(today);
+allProjects.push(thisWeek);
 inbox.addTodo(todo1);
 inbox.addTodo(todo2);
 
 currentProject = inbox;
 
-export {allProjects, Project, getCurrentProject, setCurrentProject};
+export {getAllProjects, addToProjects, Project, getCurrentProject, setCurrentProject};

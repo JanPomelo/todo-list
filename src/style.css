@@ -45,7 +45,8 @@ tr.strikeout td:before {
 
 #popUpDelete,
 form,
-#formError {
+#formError,
+#projectEditWindow {
 	position: absolute;
 	left: 50%;
 	top: 50%;
@@ -64,6 +65,6 @@ input[type='date'] {
 
 @media screen and (max-width: 500px) {
 	.moreCol {
-		width: 4rem
+		width: 4rem;
 	}
 }
