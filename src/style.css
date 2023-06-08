@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 
-input,
+input[type='text'],
 select,
 textarea {
 	-webkit-appearance: none;
@@ -46,7 +46,8 @@ tr.strikeout td:before {
 #popUpDelete,
 form,
 #formError,
-#projectEditWindow {
+#projectEditWindow,
+#deleteProjectWindow {
 	position: absolute;
 	left: 50%;
 	top: 50%;
