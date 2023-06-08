@@ -37,10 +37,10 @@ const loadHeader = () => {
 
 const loadProjectHeading = () => {
   const div = document.createElement('div');
-  div.classList = ['w-full flex flex-row gap-3 pl-2 pt-1 pb-1 items-center justify-between pr-2 row-span-2 sm:bg-blue-100 sm:rounded-l-3xl sm:flex-col'];
+  div.classList = ['w-full flex flex-row gap-3 pl-2 pt-1 pb-1 items-center justify-between pr-2 row-span-2'];
   div.id = 'headingProjects';
   const textDiv = document.createElement('div');
-  textDiv.classList = ['flex gap-1 items-center sm:absolute sm:invisible sm:pointer-events-none'];
+  textDiv.classList = ['flex gap-1 items-center'];
   const heading = document.createElement('h2');
   heading.innerText = 'Current Project:';
   heading.classList = ['font-bold underline'];
@@ -50,7 +50,7 @@ const loadProjectHeading = () => {
   const button = document.createElement('button');
   button.innerText = 'Edit Projects';
   button.classList = [
-    'rounded-xl border-black border-2 pl-2 pr-2 active:shadow-md active:shadow-indigo-500 sm:absolute sm:invisible sm:pointer-events-none',
+    'rounded-xl border-black border-2 pl-2 pr-2 active:shadow-md active:shadow-indigo-500',
   ];
   button.addEventListener('click', () => {
     loadProjectEditWindow();
@@ -221,7 +221,7 @@ const loadWrapperDiv = () => {
   const bigDiv = document.createElement('div');
   const todoDiv = document.createElement('div');
   bigDiv.classList = [
-    'h-full w-full flex flex-col sm:rounded-3xl sm:border-4 border-black sm:h-4/5 sm:w-full bg-white shadow-gray-950 sm:shadow-xl sm:shadow-gray-950 sm:grid sm:grid-cols-4',
+    'h-full w-full flex flex-col sm:rounded-3xl sm:border-4 border-black sm:h-4/5 sm:w-full bg-white shadow-gray-950 sm:shadow-xl sm:shadow-gray-950',
   ];
   todoDiv.classList = ['sm:col-span-3'];
   bigDiv.appendChild(loadProjectHeading());

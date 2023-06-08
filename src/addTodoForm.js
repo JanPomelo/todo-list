@@ -2,7 +2,7 @@
 'use strict';
 
 import closeImg from './img/close.png';
-import {getCurrentProject} from './projects.js';
+import {getAllProjects, getCurrentProject} from './projects.js';
 import {loadTodos} from './pageLoad.js';
 import {createNewTodo} from './workOnTodos';
 import {blur} from './domManips';
@@ -138,14 +138,14 @@ const addPriorityDiv = () => {
     'border-black border-2 w-36 rounded-lg active:border-4 focus:border-4 active:border-black focus:border-black pl-3',
   ];
   const high = document.createElement('option');
-  high.value = 'High';
-  high.innerText = 'High';
+  high.value = 'high';
+  high.innerText = 'high';
   const medium = document.createElement('option');
-  medium.value = 'Medium';
-  medium.innerText = 'Medium';
+  medium.value = 'medium';
+  medium.innerText = 'medium';
   const low = document.createElement('option');
-  low.value = 'Low';
-  low.innerText = 'Low';
+  low.value = 'low';
+  low.innerText = 'low';
   input.appendChild(low);
   input.appendChild(medium);
   input.appendChild(high);
@@ -219,6 +219,29 @@ const addChecklist1 = () => {
   return checkList.div;
 };
 
+const addProjectDiv = () => {
+  const project = addDivForAddToDoForm();
+  project.label.innerText = 'Project';
+  project.label.for = 'projects';
+  project.input.remove();
+  const input = document.createElement('select');
+  project.div.appendChild(input);
+  input.name = 'projects';
+  input.id = 'projects';
+  input.classList = [
+    'border-black border-2 w-36 rounded-lg active:border-4 focus:border-4 active:border-black focus:border-black pl-3',
+  ];
+  const projects = getAllProjects();
+  for (let i = 2; i < projects.length; i++) {
+    const option = document.createElement('option');
+    option.value = projects[i].getName();
+    option.innerText = option.value;
+    input.appendChild(option);
+  }
+  appendLabelAndInputToDiv(project.div, project.label, input);
+  return project.div;
+};
+
 const addSubmitButton = () => {
   const submitButton = document.createElement('button');
   submitButton.type = 'submit';
@@ -242,6 +265,7 @@ const addFormContent = () => {
   formContent.appendChild(addTitleDiv());
   formContent.appendChild(addDueDateDiv());
   formContent.appendChild(addPriorityDiv());
+  formContent.appendChild(addProjectDiv());
   formContent.appendChild(addDescriptionDiv());
   formContent.appendChild(addNotesDiv());
   formContent.appendChild(addCheckListHeading());

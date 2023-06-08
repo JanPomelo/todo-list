@@ -17,6 +17,7 @@ const toggleDone = (project, todo) => {
 const createNewTodo = () => {
   const form = document.getElementById('addTodoForm');
   const todo = new Todo(form.title.value, form.dueDate.value, form.priorities.value);
+  todo.setProject(form.projects.value);
   if (form.description.value != '') {
     todo.setDescription(form.description.value);
   }
@@ -29,6 +30,7 @@ const createNewTodo = () => {
       todo.setChecklist([form.checklist.value]);
     }
   }
+  console.log(todo);
   return todo;
 };
 const deleteTodoFromProject = (project, todo) => {

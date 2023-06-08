@@ -56,9 +56,9 @@ const deleteProject = (project) => {
 const inbox = new Project('Inbox');
 const today = new Project('Today');
 const thisWeek = new Project('This Week');
-allProjects.push(inbox);
 allProjects.push(today);
 allProjects.push(thisWeek);
+allProjects.push(inbox);
 inbox.addTodo(todo1);
 inbox.addTodo(todo2);
 
