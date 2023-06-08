@@ -4,8 +4,14 @@
 import {addToProjects, getAllProjects, Project} from './projects';
 import Plus from './img/plus.png';
 import Muelltonne from './img/mulltonne.png';
+import {blur} from './domManips';
+import {deleteProject} from './projects';
+
+let windowOpen = false;
 
 const loadDeleteProjectWindow = (project) => {
+  const editProjectWindow = document.getElementById('projectEditWindow');
+  blur(editProjectWindow);
   const div = document.createElement('div');
   div.id = 'deleteProjectWindow';
   div.classList = ['flex flex-col gap-1 bg-white border-2 border-black rounded-xl p-2 w-64'];
@@ -13,7 +19,7 @@ const loadDeleteProjectWindow = (project) => {
   heading.innerText = 'Are you sure?';
   heading.classList = ['font-bold'];
   const text = document.createElement('p');
-  text.innerHTML = 'You are about to <b>delete</b> the following Project: <b>' + project.name + '</b>';
+  text.innerHTML = 'You are about to <b>delete</b> the following Project: <b>' + project.getName() + '</b>';
   const select = document.createElement('fieldset');
   select.classList = ['flex flex-col'];
   const shiftTodos = document.createElement('div');
@@ -42,9 +48,21 @@ const loadDeleteProjectWindow = (project) => {
   const yes = document.createElement('button');
   yes.innerText = 'Yes, delete!';
   yes.classList = ['border border-black rounded px-1 text-white bg-black'];
+  yes.addEventListener('click', () => {
+    if (delTodosRadio.checked === true) {
+      deleteProject(project);
+      div.remove();
+      editProjectWindow.remove();
+      loadProjectEditWindow();
+    }
+  });
   const no = document.createElement('button');
   no.innerText = 'No, keep!';
   no.classList = yes.classList;
+  no.addEventListener('click', () => {
+    blur(editProjectWindow);
+    div.remove();
+  });
   buttons.appendChild(yes);
   buttons.appendChild(no);
   div.appendChild(heading);
@@ -57,12 +75,17 @@ const loadDeleteProjectWindow = (project) => {
   delTodos.appendChild(delTodosRadio);
   delTodos.appendChild(deleteTodosLabel);
   div.appendChild(buttons);
-  const main = document.getElementById('main');
-  main.appendChild(div);
+  const content = document.getElementById('content');
+  content.appendChild(div);
 };
 
 
 const loadProjectEditWindow = () => {
+  const main = document.getElementById('main');
+  if (!windowOpen) {
+    blur(main);
+  }
+  windowOpen = true;
   const div = document.createElement('div');
   div.id = 'projectEditWindow';
   div.classList = ['bg-white rounded-xl w-3/5 h-3/5 border-2 border-black px-2 py-1 flex flex-col'];
@@ -107,12 +130,13 @@ const loadProjectEditWindow = () => {
     addBut.appendChild(addButImg);
     addBut.classList = ['w-4 h-4 mr-2'];
     const addText = document.createElement('input');
+    addText.type = 'text';
     addText.defaultValue = 'New Project';
     addText.addEventListener('click', function deleteInputValue() {
       addText.value = '';
       addText.removeEventListener('click', deleteInputValue);
     });
-    addText.classList = ['text-slate-500'];
+    addText.classList = ['text-slate-500 active:border active:rounded-md active:border-black focus:border-black focus:border focus:rounded-md'];
     add.appendChild(addBut);
     add.appendChild(addText);
     div.appendChild(add);
@@ -133,13 +157,15 @@ const loadProjectEditWindow = () => {
   cancel.innerText = 'Cancel';
   cancel.classList = ['border rounded-lg border-black px-1 items-center bg-black text-white'];
   cancel.addEventListener('click', () => {
+    blur(main);
+    windowOpen = false;
     div.remove();
   });
   div.appendChild(buttons);
   buttons.appendChild(choose);
   buttons.appendChild(cancel);
-  const main = document.getElementById('main');
-  main.appendChild(div);
+  const content = document.getElementById('content');
+  content.appendChild(div);
 };
 
 export {loadProjectEditWindow};

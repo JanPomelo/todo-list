@@ -42,6 +42,17 @@ const getAllProjects = () => {
   return allProjects;
 };
 
+const deleteProject = (project) => {
+  for (let i = project.todos.length -1; i >= 0; i--) {
+    delete project.todos[i];
+  }
+  for (let i = allProjects.length -1; i >= 0; i--) {
+    if (project.getName() === allProjects[i].getName()) {
+      allProjects.splice(i, 1);
+    }
+  }
+};
+
 const inbox = new Project('Inbox');
 const today = new Project('Today');
 const thisWeek = new Project('This Week');
@@ -53,4 +64,4 @@ inbox.addTodo(todo2);
 
 currentProject = inbox;
 
-export {getAllProjects, addToProjects, Project, getCurrentProject, setCurrentProject};
+export {getAllProjects, deleteProject, addToProjects, Project, getCurrentProject, setCurrentProject};
