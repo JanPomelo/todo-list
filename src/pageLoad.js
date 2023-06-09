@@ -47,6 +47,7 @@ const loadProjectHeading = () => {
   const text = document.createElement('p');
   text.innerText = getCurrentProject().getName();
   text.classList = ['font-bold'];
+  text.id = 'currentProjectHeading';
   const button = document.createElement('button');
   button.innerText = 'Edit Projects';
   button.classList = [
@@ -96,6 +97,10 @@ const deleteCurrentTab = () => {
 };
 
 const loadTodos = (project, tableBody = document.getElementById('tableBody')) => {
+  const projectHeading = document.getElementById('currentProjectHeading');
+  if (projectHeading) {
+    projectHeading.innerText = getCurrentProject().getName();
+  }
   deleteCurrentTab();
   tableBody.classList.add('bg-gray-200', 'text-sm', 'md:text-base');
   const allRows = [];

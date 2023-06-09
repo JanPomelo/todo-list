@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 'use strict';
 
-import {addToProjects, getAllProjects, getCurrentProject, Project, setCurrentProject} from './projects';
+import {addTodoToNewProject, addToProjects, getAllProjects, getCurrentProject, Project, setAllProjects, setCurrentProject} from './projects';
 import Plus from './img/plus.png';
 import Muelltonne from './img/mulltonne.png';
 import {blur} from './domManips';
@@ -50,7 +50,18 @@ const loadDeleteProjectWindow = (project) => {
   yes.innerText = 'Yes, delete!';
   yes.classList = ['border border-black rounded px-1 text-white bg-black'];
   yes.addEventListener('click', () => {
+    if (getCurrentProject() === project) {
+      setCurrentProject(getAllProjects()[2]);
+    }
     if (delTodosRadio.checked === true) {
+      deleteProject(project);
+      div.remove();
+      editProjectWindow.remove();
+      loadProjectEditWindow();
+    } else {
+      for (let i = project.todos.length - 1; i >= 0; i--) {
+        addTodoToNewProject(project.todos[i], 'Inbox');
+      }
       deleteProject(project);
       div.remove();
       editProjectWindow.remove();
@@ -198,6 +209,7 @@ const loadProjectEditWindow = () => {
     blur(main);
     windowOpen = false;
     div.remove();
+    loadTodos(getCurrentProject());
   });
   div.appendChild(buttons);
   buttons.appendChild(choose);

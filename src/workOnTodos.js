@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 'use strict';
 import {loadTodos} from './pageLoad';
-import {addTodoToNewProject} from './projects';
 import {Todo} from './todo';
 
 
