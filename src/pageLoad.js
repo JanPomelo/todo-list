@@ -106,7 +106,16 @@ const loadTodos = (project, tableBody = document.getElementById('tableBody')) =>
   deleteCurrentTab();
   tableBody.classList.add('bg-gray-200', 'text-sm', 'md:text-base');
   const allRows = [];
-  console.log(project.todos);
+  if (project.todos.length === 0) {
+    const row = document.createElement('tr');
+    const td = document.createElement('td');
+    tableBody.appendChild(row);
+    row.appendChild(td);
+    td.colSpan = 5;
+    tableBody.classList.remove('bg-gray-200');
+    td.innerText = 'No To-Do\'s here yet...';
+    td.classList = ['text-center'];
+  }
   for (let i = 0; i < project.todos.length; i++) {
     const row = document.createElement('tr');
     row.classList = ['border-black border-t'];
