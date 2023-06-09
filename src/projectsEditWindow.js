@@ -1,11 +1,12 @@
 /* eslint-disable max-len */
 'use strict';
 
-import {addToProjects, getAllProjects, Project} from './projects';
+import {addToProjects, getAllProjects, getCurrentProject, Project, setCurrentProject} from './projects';
 import Plus from './img/plus.png';
 import Muelltonne from './img/mulltonne.png';
 import {blur} from './domManips';
 import {deleteProject} from './projects';
+import {loadTodos} from './pageLoad';
 
 let windowOpen = false;
 
@@ -96,6 +97,14 @@ const loadProjectEditWindow = () => {
   for (let i = 0; i <= 2; i++) {
     const projectDiv = document.createElement('div');
     projectDiv.innerText = getAllProjects()[i].getName();
+    projectDiv.classList = ['projectDiv'];
+    projectDiv.addEventListener('click', () => {
+      const otherProjects = document.getElementsByClassName('projectDiv');
+      for (let j = 0; j < otherProjects.length; j++) {
+        otherProjects[j].classList.remove('selected', 'bg-blue-200');
+      }
+      projectDiv.classList.add('selected', 'bg-blue-200');
+    });
     div.appendChild(projectDiv);
   }
   const headingCustom = document.createElement('h3');
@@ -105,8 +114,16 @@ const loadProjectEditWindow = () => {
   if (getAllProjects().length > 3) {
     for (let i = 3; i < getAllProjects().length; i++) {
       const projectDiv = document.createElement('div');
-      projectDiv.classList = ['flex justify-between items-center'];
+      projectDiv.classList = ['flex justify-between items-center projectDiv'];
       const projectText = document.createElement('p');
+      projectText.classList = ['grow'];
+      projectText.addEventListener('click', () => {
+        const otherProjects = document.getElementsByClassName('projectDiv');
+        for (let j = 0; j < otherProjects.length; j++) {
+          otherProjects[j].classList.remove('selected', 'bg-blue-200');
+        }
+        projectDiv.classList.add('selected', 'bg-blue-200');
+      });
       const projectButton = document.createElement('button');
       const projectButtonImg = document.createElement('img');
       projectButtonImg.src = Muelltonne;
@@ -153,6 +170,27 @@ const loadProjectEditWindow = () => {
   const choose = document.createElement('button');
   choose.classList = ['border rounded-lg border-black px-1 items-center bg-black text-white'];
   choose.innerText = 'Pick';
+  choose.addEventListener('click', () => {
+    let selected = document.getElementsByClassName('selected');
+    if (selected.length === 0) {
+      return;
+    }
+    if (selected[0].classList.contains('flex')) {
+      selected = selected[0].firstChild.innerText;
+    } else {
+      selected = selected[0].innerText;
+    }
+    const allProjects = getAllProjects();
+    for (let i = 0; i < allProjects.length; i++) {
+      if (selected.trim() === allProjects[i].name) {
+        setCurrentProject(allProjects[i]);
+        blur(main);
+        windowOpen = false;
+        div.remove();
+        loadTodos(getCurrentProject());
+      }
+    }
+  });
   const cancel = document.createElement('button');
   cancel.innerText = 'Cancel';
   cancel.classList = ['border rounded-lg border-black px-1 items-center bg-black text-white'];

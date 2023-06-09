@@ -31,7 +31,7 @@ const createNewTodo = () => {
       todo.setChecklist([form.checklist.value]);
     }
   }
-  addTodoToNewProject(todo, todo.getProject());
+  // addTodoToNewProject(todo, todo.getProject());
   return todo;
 };
 const deleteTodoFromProject = (project, todo) => {
