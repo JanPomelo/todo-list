@@ -241,6 +241,9 @@ const addProjectDiv = () => {
     option.value = projects[i].getName();
     option.innerText = option.value;
     input.appendChild(option);
+    if (getCurrentProject().getName() === option.value) {
+      option.selected = true;
+    }
   }
   appendLabelAndInputToDiv(project.div, project.label, input);
   return project.div;
@@ -286,7 +289,7 @@ const displayAddTodoForm = () => {
   form.action = 'submit';
   form.id = 'addTodoForm';
   form.classList = [
-    'absolute border-black border-2 rounded-xl bg-white shadow-xl p-2 max-w-lg',
+    'absolute border-black border-2 rounded-xl bg-white shadow-xl p-2 max-w-lg shadow-gray-700',
   ];
   content.appendChild(form);
   form.appendChild(addFormHeader());

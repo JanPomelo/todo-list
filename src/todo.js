@@ -164,7 +164,7 @@ Todo.prototype.setProject = function(project) {
 Todo.prototype.addItemToChecklist = function(item) {
   if (item.trim() != '') {
     this.checklist.push(item);
-    console.log(this.checklist);
+    // console.log(this.checklist);
   }
 };
 
@@ -172,7 +172,7 @@ Todo.prototype.deleteItemFromCheckList = function(item) {
   for (let i = this.checklist.length - 1; i >= 0; i--) {
     if (item === this.checklist[i]) {
       this.checklist.splice(i, 1);
-      console.log(this.checklist);
+      // console.log(this.checklist);
     }
   }
 };

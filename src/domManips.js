@@ -327,7 +327,7 @@ const expandOneRow = (attribute, text, todo) => {
   const col1ID = todo.getTitle().concat('-', text);
   const col2 = document.createElement('td');
   col2.id = col1ID;
-  col1.classList = ['pl-4 text-xs md:text-sm bg-gray-100'];
+  col1.classList = ['pl-4 text-xs md:text-sm bg-gray-100 align-top'];
   col2.classList = ['text-xs md:text-sm bg-gray-100'];
   col1.innerText = text;
   if (text != 'Checklist') {

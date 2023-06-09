@@ -48,7 +48,7 @@ const loadProjectHeading = () => {
   heading.innerText = 'Current Project:';
   heading.classList = ['font-bold underline'];
   const text = document.createElement('p');
-  console.log(getCurrentProject());
+  // console.log(getCurrentProject());
   text.innerText = getCurrentProject().getName();
   text.classList = ['font-bold'];
   text.id = 'currentProjectHeading';
@@ -137,9 +137,16 @@ const loadTodos = (project, tableBody = document.getElementById('tableBody')) =>
         case 1:
           td.innerText = project.todos[i].getDueDate();
           td.id = project.todos[i].getTitle().concat('-', 'DueDate');
-          if (compareAsc(parseISO(format(new Date(), 'yyyy-MM-dd')), parseISO(td.innerText)) != -1) {
+          const dateCompare = compareAsc(parseISO(format(new Date(), 'yyyy-MM-dd')), parseISO(td.innerText));
+          if (dateCompare != -1) {
             td.classList.add('font-bold');
+            if (dateCompare == 0) {
+              row.classList.add('bg-orange-50');
+            } else {
+              row.classList.add('bg-rose-300');
+            }
           } else {
+            row.classList.remove('bg-rose-300', 'bg-orange-50');
             td.classList.remove('font-bold');
           }
           break;
@@ -160,6 +167,7 @@ const loadTodos = (project, tableBody = document.getElementById('tableBody')) =>
             const details = expandMore(project.todos[i]);
             for (let j = details.length - 1; j >= 0; j--) {
               insertDetailRowToTableBody(details[j], row.rowIndex);
+              details[j].classList.add('border', 'border-gray-300');
             }
             displayCheckListItems(project.todos[i]);
             moreBut.removeEventListener('click', expand);

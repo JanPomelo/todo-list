@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 'use strict';
 
-import {addTodoToNewProject, addToProjects, getAllProjects, getCurrentProject, Project, setAllProjects, setCurrentProject} from './projects';
+import {addTodoToNewProject, addToProjects, getAllProjects, getCurrentProject, Project, setCurrentProject} from './projects';
 import Plus from './img/plus.png';
 import Muelltonne from './img/mulltonne.png';
 import {blur} from './domManips';
@@ -15,7 +15,7 @@ const loadDeleteProjectWindow = (project) => {
   blur(editProjectWindow);
   const div = document.createElement('div');
   div.id = 'deleteProjectWindow';
-  div.classList = ['flex flex-col gap-1 bg-white border-2 border-black rounded-xl p-2 w-64'];
+  div.classList = ['flex flex-col gap-1 bg-white border-2 border-black rounded-xl p-2 w-64 shadow-xl p-2 max-w-lg shadow-gray-700'];
   const heading = document.createElement('h3');
   heading.innerText = 'Are you sure?';
   heading.classList = ['font-bold'];
@@ -100,7 +100,7 @@ const loadProjectEditWindow = () => {
   windowOpen = true;
   const div = document.createElement('div');
   div.id = 'projectEditWindow';
-  div.classList = ['bg-white rounded-xl w-3/5 h-3/5 border-2 border-black px-2 py-1 flex flex-col'];
+  div.classList = ['bg-white rounded-xl w-3/5 h-3/5 border-2 border-black px-2 py-1 flex flex-col shadow-xl p-2 max-w-lg shadow-gray-700'];
   const headingDefault = document.createElement('h3');
   headingDefault.innerText = 'Default Projects';
   headingDefault.classList = ['text-lg font-bold border-b'];
