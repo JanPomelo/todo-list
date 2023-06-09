@@ -1,6 +1,8 @@
 /* eslint-disable max-len */
 'use strict';
 /* eslint-disable require-jsdoc */
+
+import {compareAsc, parseISO} from 'date-fns';
 class Todo {
   constructor(title, dueDate, priority, description, checklist = [], notes = '', done = 'false', project = 'Inbox') {
     this.title = title;
@@ -175,6 +177,65 @@ Todo.prototype.deleteItemFromCheckList = function(item) {
   }
 };
 
-export {Todo};
+
+function compareDates(a, b) {
+  let doneResult;
+  if (a.getDone() === true) {
+    if (b.getDone() === false) {
+      doneResult = 1;
+    } else {
+      doneResult = 0;
+    }
+  } else {
+    if (b.getDone() === true) {
+      doneResult = -1;
+    } else {
+      doneResult = 0;
+    }
+  }
+  if (doneResult === 0) {
+    const dateResult = compareAsc(parseISO(a.getDueDate()), parseISO(b.getDueDate()));
+    if (dateResult === 0) {
+      let priorityResult;
+      if (a.getPriority() === 'high') {
+        switch (b.getPriority()) {
+          case 'high':
+            priorityResult = 0;
+            break;
+          default:
+            priorityResult = -1;
+        }
+      } else if (a.getPriority() === 'medium') {
+        switch (b.getPriority()) {
+          case 'high':
+            priorityResult = 1;
+            break;
+          case 'medium':
+            priorityResult = 0;
+            break;
+          default:
+            priorityResult = -1;
+            break;
+        }
+      } else {
+        switch (b.getPriority()) {
+          case 'low':
+            priorityResult = 0;
+            break;
+          default:
+            priorityResult = 1;
+            break;
+        }
+      }
+      return priorityResult;
+    } else {
+      return dateResult;
+    }
+  } else {
+    return doneResult;
+  }
+}
+
+export {Todo, compareDates};
 
 

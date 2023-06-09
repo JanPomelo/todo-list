@@ -121,6 +121,7 @@ addToProjects(inbox);
 setCurrentProject(inbox);
 */
 
+
 const checkForThisWeek = () => {
   allProjects[1].clearTodos();
   for (let i = 2; i < allProjects.length; i++) {

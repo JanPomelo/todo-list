@@ -11,6 +11,7 @@ import {blur, expandMore, insertDetailRowToTableBody, cancelEdit, editingMode, d
 import {loadProjectEditWindow} from './projectsEditWindow';
 import {initialProjectLoad, loadProjectsFromStorage, saveProjects2Storage} from './localStorageFunctions';
 import {format, parseISO, compareAsc} from 'date-fns';
+import {compareDates} from './todo';
 
 const loadHeaderMainHeading = () => {
   const heading = document.createElement('h1');
@@ -120,7 +121,9 @@ const loadTodos = (project, tableBody = document.getElementById('tableBody')) =>
     td.innerText = 'No To-Do\'s here yet...';
     td.classList = ['text-center'];
   }
-  for (let i = 0; i < project.todos.length; i++) {
+  const projectTodos = project.todos;
+  projectTodos.sort(compareDates);
+  for (let i = 0; i < projectTodos.length; i++) {
     const row = document.createElement('tr');
     row.classList = ['border-black border-t'];
     for (let j = 0; j < 5; j++) {
@@ -196,6 +199,7 @@ const loadTodos = (project, tableBody = document.getElementById('tableBody')) =>
           }
           tickDone.addEventListener('click', () => {
             toggleDone(project, project.todos[i]);
+            loadTodos(project);
           });
           trash.addEventListener('click', () => {
             const main = document.getElementById('main');
