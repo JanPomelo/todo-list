@@ -16,9 +16,13 @@ class Project {
   };
 
   deleteTodo = (todo) => {
-    for (let i = 0; i < this.todos.length; i++) {
-      if (todo.getTitle() === this.todos[i].getTitle()) {
-        this.todos.splice(i, 1);
+    if (this.todos.length === 1) {
+      this.todos = [];
+    } else {
+      for (let i = 0; i < this.todos.length; i++) {
+        if (todo.getTitle() === this.todos[i].getTitle()) {
+          this.todos.splice(i, 1);
+        }
       }
     }
   };

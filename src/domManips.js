@@ -306,9 +306,9 @@ const safeEdit = (todo, col3, safeBut, cancelBut, editBut) => {
     const project = getCurrentProject();
     deleteTodoFromProject(project, todo);
     setCurrentProject(project);
+    todo.setProject(projectInput.value);
     addTodoToNewProject(todo, todo.getProject());
   }
-  todo.setProject(projectInput.value);
   projectTD.innerText = projectInput.value;
   descInput.remove();
   projectInput.remove();

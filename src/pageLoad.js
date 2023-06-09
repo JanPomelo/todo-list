@@ -99,6 +99,7 @@ const loadTodos = (project, tableBody = document.getElementById('tableBody')) =>
   deleteCurrentTab();
   tableBody.classList.add('bg-gray-200', 'text-sm', 'md:text-base');
   const allRows = [];
+  console.log(project.todos);
   for (let i = 0; i < project.todos.length; i++) {
     const row = document.createElement('tr');
     row.classList = ['border-black border-t'];
