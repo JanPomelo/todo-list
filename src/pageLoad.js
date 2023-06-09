@@ -10,6 +10,7 @@ import {displayAddTodoForm} from './addTodoForm';
 import {blur, expandMore, insertDetailRowToTableBody, cancelEdit, editingMode, deleteButToggle} from './domManips';
 import {loadProjectEditWindow} from './projectsEditWindow';
 import {initialProjectLoad, loadProjectsFromStorage, saveProjects2Storage} from './localStorageFunctions';
+import {format, parseISO, compareAsc} from 'date-fns';
 
 const loadHeaderMainHeading = () => {
   const heading = document.createElement('h1');
@@ -133,10 +134,20 @@ const loadTodos = (project, tableBody = document.getElementById('tableBody')) =>
         case 1:
           td.innerText = project.todos[i].getDueDate();
           td.id = project.todos[i].getTitle().concat('-', 'DueDate');
+          if (compareAsc(parseISO(format(new Date(), 'yyyy-MM-dd')), parseISO(td.innerText)) != -1) {
+            td.classList.add('font-bold');
+          } else {
+            td.classList.remove('font-bold');
+          }
           break;
         case 2:
           td.innerText = project.todos[i].getPriority();
           td.id = project.todos[i].getTitle().concat('-', 'Priority');
+          if (td.innerText === 'high') {
+            td.classList.add('font-bold');
+          } else {
+            td.classList.remove('font-bold');
+          }
           break;
         case 3:
           const moreBut = document.createElement('button');

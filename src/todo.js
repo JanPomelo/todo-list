@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-
+'use strict';
 /* eslint-disable require-jsdoc */
 class Todo {
   constructor(title, dueDate, priority, description, checklist = [], notes = '', done = 'false', project = 'Inbox') {

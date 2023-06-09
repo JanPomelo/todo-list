@@ -1,3 +1,5 @@
+'use strict';
+
 import './style.css';
 import {loadPage} from './pageLoad';
 

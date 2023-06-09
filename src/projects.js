@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable require-jsdoc */
+
+'use strict';
 import {isEqual, format, parseISO, nextMonday, compareAsc} from 'date-fns';
 
 class Project {

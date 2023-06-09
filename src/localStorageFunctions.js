@@ -28,7 +28,7 @@ const loadProjectsFromStorage = () => {
       projects[i].todos[j].getDescription = Todo.prototype.getDescription;
       projects[i].todos[j].getChecklist = Todo.prototype.getChecklist;
       projects[i].todos[j].getNotes = Todo.prototype.getNotes;
-      projects[i].todos[j].getProjects = Todo.prototype.getProjects;
+      projects[i].todos[j].getProject = Todo.prototype.getProject;
       projects[i].todos[j].setTitle = Todo.prototype.setTitle;
       projects[i].todos[j].setDueDate = Todo.prototype.setDueDate;
       projects[i].todos[j].setPriority = Todo.prototype.setPriority;
@@ -36,7 +36,7 @@ const loadProjectsFromStorage = () => {
       projects[i].todos[j].setDescription = Todo.prototype.setDescription;
       projects[i].todos[j].setChecklist = Todo.prototype.setChecklist;
       projects[i].todos[j].setNotes = Todo.prototype.setNotes;
-      projects[i].todos[j].setProjects = Todo.prototype.setProjects;
+      projects[i].todos[j].setProject = Todo.prototype.setProject;
       projects[i].todos[j].addItemToChecklist = Todo.prototype.addItemToChecklist;
       projects[i].todos[j].deleteItemFromCheckList = Todo.prototype.deleteItemFromCheckList;
     }
