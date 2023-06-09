@@ -3,7 +3,7 @@
 
 import replay from './img/replay.png';
 import muellTonne from './img/mulltonne.png';
-import {getCurrentProject} from './projects';
+import {checkForThisWeek, checkForToday, getCurrentProject} from './projects';
 import {toggleDone} from './workOnTodos';
 import {displayCheckListItems, reallySure} from './domManips';
 import {displayAddTodoForm} from './addTodoForm';
@@ -97,6 +97,8 @@ const deleteCurrentTab = () => {
 };
 
 const loadTodos = (project, tableBody = document.getElementById('tableBody')) => {
+  checkForToday();
+  checkForThisWeek();
   const projectHeading = document.getElementById('currentProjectHeading');
   if (projectHeading) {
     projectHeading.innerText = getCurrentProject().getName();

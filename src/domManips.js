@@ -5,6 +5,7 @@ import {deleteTodoFromProject} from './workOnTodos.js';
 import Plus from './img/plus.png';
 import Muelltonne from './img/mulltonne.png';
 import {addTodoToNewProject, getAllProjects, getCurrentProject, setCurrentProject} from './projects.js';
+import {loadTodos} from './pageLoad.js';
 
 
 let editingMode = false;
@@ -317,6 +318,7 @@ const safeEdit = (todo, col3, safeBut, cancelBut, editBut) => {
   dueDateInput.remove();
   priorityInput.remove();
   customCol3(col3, safeBut, cancelBut, editBut);
+  loadTodos(getCurrentProject());
 };
 
 const expandOneRow = (attribute, text, todo) => {
