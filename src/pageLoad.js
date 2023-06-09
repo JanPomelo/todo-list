@@ -9,6 +9,7 @@ import {displayCheckListItems, reallySure} from './domManips';
 import {displayAddTodoForm} from './addTodoForm';
 import {blur, expandMore, insertDetailRowToTableBody, cancelEdit, editingMode, deleteButToggle} from './domManips';
 import {loadProjectEditWindow} from './projectsEditWindow';
+import {initialProjectLoad, loadProjectsFromStorage, saveProjects2Storage} from './localStorageFunctions';
 
 const loadHeaderMainHeading = () => {
   const heading = document.createElement('h1');
@@ -45,6 +46,7 @@ const loadProjectHeading = () => {
   heading.innerText = 'Current Project:';
   heading.classList = ['font-bold underline'];
   const text = document.createElement('p');
+  console.log(getCurrentProject());
   text.innerText = getCurrentProject().getName();
   text.classList = ['font-bold'];
   text.id = 'currentProjectHeading';
@@ -103,6 +105,7 @@ const loadTodos = (project, tableBody = document.getElementById('tableBody')) =>
   if (projectHeading) {
     projectHeading.innerText = getCurrentProject().getName();
   }
+  saveProjects2Storage();
   deleteCurrentTab();
   tableBody.classList.add('bg-gray-200', 'text-sm', 'md:text-base');
   const allRows = [];
@@ -281,9 +284,16 @@ const loadPage = () => {
   const content = document.createElement('div');
   content.id = 'content';
   content.classList = ['flex flex-col h-screen'];
+  if (localStorage.getItem('projects')) {
+    loadProjectsFromStorage();
+  } else {
+    initialProjectLoad();
+    saveProjects2Storage();
+  }
   content.appendChild(loadHeader());
   content.appendChild(loadMain());
   content.appendChild(loadFooter());
+
   return content;
 };
 export {loadTodos, loadPage};

@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
 /* eslint-disable require-jsdoc */
-import {todo1, todo2} from './todo';
 import {isEqual, format, parseISO, nextMonday, compareAsc} from 'date-fns';
 
 class Project {
@@ -8,6 +7,7 @@ class Project {
     this.name = name;
     this.todos = todos;
   }
+  /*
   addTodo = (todo) => {
     this.todos.push(todo);
   };
@@ -29,7 +29,33 @@ class Project {
       }
     }
   };
+  */
 }
+
+Project.prototype.addTodo = function(todo) {
+  this.todos.push(todo);
+};
+
+Project.prototype.getName = function() {
+  return this.name;
+};
+
+Project.prototype.clearTodos = function() {
+  this.todos = [];
+};
+
+Project.prototype.deleteTodo = function(todo) {
+  if (this.todos.length === 1) {
+    this.todos = [];
+  } else {
+    for (let i = 0; i < this.todos.length; i++) {
+      if (todo.getTitle() === this.todos[i].getTitle()) {
+        this.todos.splice(i, 1);
+      }
+    }
+  }
+};
+
 let currentProject = '';
 let allProjects = [];
 
@@ -72,41 +98,40 @@ const deleteProject = (project) => {
 };
 
 
-const inbox = new Project('Inbox');
-const today = new Project('Today');
-const thisWeek = new Project('This Week');
-allProjects.push(today);
-allProjects.push(thisWeek);
-allProjects.push(inbox);
-inbox.addTodo(todo1);
-inbox.addTodo(todo2);
-
 const checkForToday = () => {
-  today.clearTodos();
+  allProjects[0].clearTodos();
   for (let i = 2; i < allProjects.length; i++) {
     for (let j = 0; j < allProjects[i].todos.length; j++) {
       const todayDay = format(new Date(), 'yyyy-MM-dd');
       if (isEqual(parseISO(todayDay), parseISO(allProjects[i].todos[j].getDueDate()))) {
-        today.addTodo(allProjects[i].todos[j]);
+        allProjects[0].addTodo(allProjects[i].todos[j]);
       }
     }
   }
 };
+/*
+const inbox = new Project('Inbox');
+const today = new Project('Today');
+const thisWeek = new Project('This Week');
+addToProjects(today);
+addToProjects(thisWeek);
+addToProjects(inbox);
+setCurrentProject(inbox);
+*/
 
 const checkForThisWeek = () => {
-  thisWeek.clearTodos();
+  allProjects[1].clearTodos();
   for (let i = 2; i < allProjects.length; i++) {
     for (let j = 0; j < allProjects[i].todos.length; j++) {
       const thisWeekDate = format(nextMonday(parseISO(format(new Date(), 'yyyy-MM-dd'))), 'yyyy-MM-dd');
       if (compareAsc(parseISO(thisWeekDate), parseISO(allProjects[i].todos[j].getDueDate())) != -1) {
-        thisWeek.addTodo(allProjects[i].todos[j]);
+        allProjects[1].addTodo(allProjects[i].todos[j]);
         // }
       }
     }
   }
 };
 
-
-currentProject = inbox;
+// currentProject = inbox;
 
 export {getAllProjects, setAllProjects, addTodoToNewProject, deleteProject, addToProjects, Project, getCurrentProject, setCurrentProject, checkForToday, checkForThisWeek};
