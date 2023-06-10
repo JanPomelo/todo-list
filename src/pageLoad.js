@@ -264,7 +264,7 @@ const loadWrapperDiv = () => {
   const bigDiv = document.createElement('div');
   const todoDiv = document.createElement('div');
   bigDiv.classList = [
-    'h-full w-full flex flex-col sm:rounded-3xl sm:border-4 border-black sm:h-4/5 sm:w-full bg-white shadow-gray-950 sm:shadow-xl sm:shadow-gray-950',
+    'h-full w-full flex flex-col sm:rounded-3xl sm:border-4 border-black sm:h-4/5 sm:w-full bg-white shadow-gray-950 sm:shadow-xl sm:shadow-gray-950 z-10',
   ];
   todoDiv.classList = ['sm:col-span-3'];
   bigDiv.appendChild(loadProjectHeading());
@@ -276,9 +276,10 @@ const loadWrapperDiv = () => {
 
 const loadMain = () => {
   const main = document.createElement('main');
-  main.classList = ['flex-grow bg-grey-100 flex justify-center items-center sm:pl-5 sm:pr-5 xl:pr-20 xl:pl-20'];
+  main.classList = ['flex-grow flex justify-center items-center sm:pl-5 sm:pr-5 xl:pr-20 xl:pl-20'];
   main.id = 'main';
   main.appendChild(loadWrapperDiv());
+
   return main;
 };
 const loadFooterText1 = () => {
